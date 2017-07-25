@@ -1,0 +1,36 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
+<etl>
+		<properties>
+        	<include href="messages.properties"/>
+    	</properties>
+        <connection id="db1" driver="$mysql_driver" url="$mysql_redmine_url" user="$mysql_redmine_user" password="$mysql_redmine_password" />
+        
+        <connection id="db2" driver="$mysql_driver" url="$mysql_cresta_url" user="$mysql_cresta_user" password="$mysql_cresta_password">
+        </connection>
+        	
+        <connection id="out" driver="$csv_driver" url="$csv_url">
+<!-- 		    format.created_on.type=date
+		    format.created_on.pattern=MM-dd-yyyy HH:mm:ss -->
+        </connection>
+        
+        <connection id="js" driver="script"/>
+             
+<!--         <query connection-id="db1">
+            Select product from software category in db1
+            SELECT * FROM projects WHERE id='1';
+            for each row execute a script
+	            <script connection-id="db2">
+	                Insert all selected products to db2
+	                     use ? to reference properties, columns or ?{expressions}
+	                INSERT INTO projects(id, name, description, is_public, created_on, updated_on, identifier, status, lft, rgt) values (?id, ?name, ?description, ?is_public, ?created_on, ?updated_on, ?identifier, ?status, ?lft, ?rgt);
+	            </script>
+        </query> -->
+
+	    <query connection-id="db1">
+	        <!--Selects all not closed bugs -->
+	        SELECT d.rejection, d.release FROM defect_density_table d;       
+		        <script connection-id="out">
+		            $rejection, $release
+		        </script>
+	    </query>	    
+</etl>

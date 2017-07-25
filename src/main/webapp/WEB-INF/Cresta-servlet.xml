@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/mvc
+ 		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+ 		http://www.springframework.org/schema/util 
+ 		http://www.springframework.org/schema/util/spring-util.xsd
+      	http://www.springframework.org/schema/task 
+      	http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+	<context:component-scan base-package="com.nttdata.web" />
+
+	<context:annotation-config />
+
+	<mvc:annotation-driven />
+	
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<bean id="crestaProperties"
+    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+ <property name="location" value="file:///E:/opt/apache-tomcat-8.0.36/webapps/resources1/config.properties" />
+</bean>
+	
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+	<!-- DataSource configuration of database -->
+		<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<!-- <property name="url" value="jdbc:mysql://10.248.3.91:3306/cresta" /> -->
+		<property name="url" value="${mysql_cresta_url}" />
+		<property name="username" value="${mysql_cresta_user}" />
+		<property name="password" value="${mysql_cresta_password}" />
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="dataSource1"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<!-- <property name="url" value="jdbc:mysql://10.248.3.91:3306/cresta" /> -->
+		<property name="url" value="${mysql_cresta_url}" />
+		<property name="username" value="${mysql_cresta_user}" />
+		<property name="password" value="${mysql_cresta_password}" />
+		
+	</bean>
+
+	<bean id="jdbcTelephonicaTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource1"></property>
+	</bean>
+	  <bean id="predictLeakage" class="scriptella.driver.spring.EtlExecutorBean">
+        <!-- <property name="configLocation" value="classpath:predictDensity2.xml"/> -->
+        <property name="configLocation" value="classpath:predictDensityStaticUseCase3.xml"/>
+        
+    </bean>
+    
+    <bean id="defectiveModules" class="scriptella.driver.spring.EtlExecutorBean">
+        <property name="configLocation" value="classpath:defectiveModules2.xml"/>
+    </bean>
+        
+       <bean id="predictDefectDensityUseCaseTelephonica" class="scriptella.driver.spring.EtlExecutorBean">
+        <property name="configLocation" value="classpath:predictDefectDensityUseCaseTelephonica.xml"/>
+    </bean>
+     <bean id="predictDefectDeferralTelephonica" class="scriptella.driver.spring.EtlExecutorBean">
+        <property name="configLocation" value="classpath:predictDefectDeferralTelephonica.xml"/>
+    </bean>
+    
+     <bean id="predictDefectAcceptanceTelephonica" class="scriptella.driver.spring.EtlExecutorBean">
+        <property name="configLocation" value="classpath:predictDefectAcceptanceTelephonica.xml"/>
+    </bean>
+    
+     <bean id="predictDefectCountTelephonica" class="scriptella.driver.spring.EtlExecutorBean">
+        <property name="configLocation" value="classpath:predictDefectCountTelephonica.xml"/>
+    </bean>
+    
+     <bean id="predictFunctionalDefectCountTelephonica" class="scriptella.driver.spring.EtlExecutorBean">
+        <property name="configLocation" value="classpath:predictFunctionalDefectCountTelephonica.xml"/>
+    </bean>
+
+     <bean id="scriptellaETL" class="com.nttdata.web.service.ScriptellaETL">
+      <!--   <property name="calculateUclLclExecutorBean" ref="calculateUclLcl"/> -->
+        <property name="predictLeakageBean" ref="predictLeakage"/>
+         <property name="predictDefectDensityUseCaseTelephonicaBean" ref="predictDefectDensityUseCaseTelephonica"/>
+         <property name="predictDefectDeferralTelephonicaBean" ref="predictDefectDeferralTelephonica"/>
+          <property name="predictDefectAcceptanceTelephonicaBean" ref="predictDefectAcceptanceTelephonica"/>
+          <property name="predictDefectCountTelephonicaBean" ref="predictDefectCountTelephonica"/>
+          <property name="predictFunctionalDefectCountTelephonicaBean" ref="predictFunctionalDefectCountTelephonica"/>
+        
+    </bean>
+    
+    <bean id="talendETL" class="com.nttdata.web.service.TalendETL">
+    </bean>
+   <bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames" value="resources/messages" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+    
+    
+</beans>

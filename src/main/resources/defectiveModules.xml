@@ -1,0 +1,63 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
+<etl>
+	<properties>
+		<include href="messages.properties" />
+	</properties>
+	<connection id="db1" driver="$mysql_driver" url="$mysql_redmine_url"
+		user="$mysql_redmine_user" password="$mysql_redmine_password" />
+	<connection id="java" driver="janino" />
+	<connection id="script" driver="script" />
+	<connection id="out" driver="$csv_driver" url="$csv_url" />
+	<connection id="db2" driver="$mysql_driver" url="$mysql_cresta_url"
+		user="$mysql_cresta_user" password="$mysql_cresta_password">
+		
+	</connection>
+	<connection id="db3" driver="$mysql_driver" url="$mysql_cresta_url"
+		user="$mysql_cresta_user" password="$mysql_cresta_password">
+	</connection>
+
+
+	<query connection-id="java">
+		java.lang.String userId = (java.lang.String) get("userId");
+		set("userId", userId);
+		java.lang.String projectId = (java.lang.String) get("projectId");
+		set("projectId", projectId);
+		java.lang.String predictionCode = (java.lang.String) get("predictionCode");
+		set("predictionCode", predictionCode);
+		java.lang.System.out.println("***********************" + projectId);
+		next();
+		<query connection-id="db1">
+			SELECT count(cpv.value) as DEFECT_COUNT,I.LOCK_VERSION as RELEASE_VERSION,
+(select count(cpvphaseUAT.id) from issues issd
+Left join custom_values cpvphaseUAT on cpvphaseUAT.customized_id=issd.id  and cpvphaseUAT.custom_field_id=(select Id from custom_fields where name='Phase of Detection') and cpvphaseUAT.value like 'Implementation (UAT%'
+where issd.project_id=I.project_id and issd.LOCK_VERSION=I.LOCK_VERSION) as DEFECT_LEAKAGE,
+(select count(ii.id) from issues ii
+inner join journals j1 on j1.journalized_id=ii.id
+inner join journal_details jd1 on jd1.journal_id=j1.id and jd1.property='attr' and jd1.prop_key='status_id' and jd1.old_value =(SELECT id FROM issue_statuses  where name ='Invalid Closed')
+ where ii.project_id=I.project_id and ii.LOCK_VERSION=I.LOCK_VERSION) as DEFECT_REJECTED
+FROM custom_fields c
+Left join custom_fields_projects cpj on cpj.custom_field_id =(select Id from custom_fields where name='Module')
+Left join projects pj on pj.id=cpj.project_id
+join issues I on I.PROJECT_ID=pj.ID
+left join custom_values cpv on customized_id=I.id  and cpv.custom_field_id=(select Id from custom_fields where name='Module')
+lEFT JOIN trackers T ON T.ID=I.TRACKER_ID
+Left join issue_statuses ist on ist.id=I.status_id
+left join journals j on j.journalized_id=I.id
+left join journal_details jd on jd.journal_id=j.id and jd.property='attr' and jd.prop_key='status_id' and jd.old_value in(SELECT id FROM issue_statuses  where name ='Invalid Closed')
+where c.name='Module' and cpv.value !='' and I.project_id=$projectId
+group by I.project_id,I.LOCK_VERSION
+order by I.LOCK_VERSION asc;
+			<script connection-id="db2">
+				insert into defect_density_version (USERID, PRED_CODE, MODULE_NAME, RELEASE_VERSION, DENSITY, LEAKAGE, REJECTION) values ($userId, '$predictionCode', 'MODULE1', ?RELEASE_VERSION, ?DENSITY, ?DEFECT_LEAKAGE, ?DEFECT_REJECTED);
+				
+			</script>
+				
+		</query>
+		
+	</query>
+	
+	
+	<!-- <query connection-id="db2"> Selects all not closed bugs SELECT d.RELEASE_VERSION, 
+		d.DENSITY FROM defect_density_version d; <script connection-id="out"> $RELEASE_VERSION, 
+		$DENSITY </script> </query> -->
+</etl>
