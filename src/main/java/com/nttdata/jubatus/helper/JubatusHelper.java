@@ -35,7 +35,7 @@ public class JubatusHelper {
 			String key = null;
 			switch (weightagesId) {
 			case 1:
-				key = "defect _density";
+				key = "defect_density";
 				break;
 			case 2:
 				key = "defect_leakage";
