@@ -31,7 +31,7 @@
 	</bean>
 	<bean id="crestaProperties"
     class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
- <property name="location" value="file:D:\\config\\config.properties" />
+ <property name="location" value="file:////D:/config/config.properties" />
 </bean>
 	
 	<mvc:resources mapping="/resources/**" location="/resources/" />
