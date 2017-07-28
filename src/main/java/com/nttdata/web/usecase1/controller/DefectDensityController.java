@@ -67,7 +67,7 @@ public class DefectDensityController {
 
 ModelAndView modelView = null;
 if (algorithmId == 1)
-	modelView = new ModelAndView("prediction For All Algorithms");
+	modelView = new ModelAndView("prediction ForAll Algorithms");
 else
 	modelView = new ModelAndView("prediction");
 
