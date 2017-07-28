@@ -19,7 +19,8 @@ function validateForm1() {
 		alert("Number of Resources should be greater than 0!");
 		return false;
 	}
-	else if(numberOfResources == "" || numberOfResources==null ||numberOfResources = Nan){
+	else if(numberOfResources == "" || numberOfResources == null || numberOfResources = Nan)
+	{
 		alert("Please Enter Number of Resources");
 		return false;
 	}

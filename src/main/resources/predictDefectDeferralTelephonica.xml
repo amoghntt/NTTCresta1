@@ -1,7 +1,7 @@
 <!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
 <etl>
 			<properties>
-  <include href="/opt/apache-tomcat-8.0.36/webapps/resources1/config.properties"/>
+  <include href="/D:/config/config.properties"/>
     	</properties>
         <connection id="db1" driver="$mysql_driver" url="$mysql_cresta_url"  user="$mysql_cresta_user" password="$mysql_cresta_password"/>
         <connection id="java" driver="janino"/>

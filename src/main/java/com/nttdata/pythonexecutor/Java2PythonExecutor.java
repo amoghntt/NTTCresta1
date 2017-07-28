@@ -21,6 +21,7 @@ public class Java2PythonExecutor {
 		int result = 0;
 		try {
 			Resource yourfile = new ClassPathResource(python_script_file);
+			
 			String filePath = yourfile.getFile().getAbsolutePath();
 			log.info("filePath = " + filePath);
 			ProcessBuilder pb = new ProcessBuilder(ScikitConstants.PYTHON_COMMAND, filePath, prediction_code, userId);
