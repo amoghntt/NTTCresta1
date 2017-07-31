@@ -1,0 +1,39 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
+<etl>
+			<properties>
+        	<include href="messages.properties"/>
+    	</properties>
+        <connection id="db1" driver="$mysql_driver" url="$mysql_redmine_url" user="$mysql_redmine_user" password="$mysql_redmine_password" />
+        <connection id="java" driver="janino"/>
+        <connection id="script" driver="script"/>
+        <connection id="out" driver="$csv_driver" url="$csv_url"/>
+        <connection id="db2" driver="$mysql_driver" url="$mysql_cresta_url" user="$mysql_cresta_user" password="$mysql_cresta_password">
+        </connection>
+        
+             
+		<query connection-id="java">
+			java.lang.String userId = (java.lang.String) get("userId");
+	    	set("userId", userId); 
+	    	java.lang.String projectId = (java.lang.String) get("projectId");
+	    	set("projectId", projectId);
+	    	java.lang.String predictionCode = (java.lang.String) get("predictionCode");
+	    	set("predictionCode", predictionCode);  
+	    	java.lang.System.out.println("***********************" + projectId);
+	    	next();
+		<query connection-id="db1">
+			select * from usecase1B;
+	            <script connection-id="db2">
+	            	insert into usecase1B (USERID, PRED_CODE,  RELEASE_VERSION, defect_deferral_rate, defect_severity, defect_priority, effort_to_fix_defect,cost_to_fix_defect,impact_of_defect_fix,feasibility_within_milestone,availability_of_budget,complexity_of_defect_fix) values
+	            						  ($userid, '$pred_code',  $release_version, $defect_deferral_rate, $defect_severity, $defect_priority, $effort_to_fix_defect, $cost_to_fix_defect, $impact_of_defect_fix, $feasibility_within_milestone,$availability_of_budget,$complexity_of_defect_fix);
+	            </script>
+        </query>
+        </query>
+
+	   <!--  <query connection-id="db2">
+	        Selects all not closed bugs
+	        SELECT d.RELEASE_VERSION, d.DENSITY FROM defect_density_version d;       
+		        <script connection-id="out">
+		            $RELEASE_VERSION, $DENSITY
+		        </script>
+	    </query>	     -->
+</etl>

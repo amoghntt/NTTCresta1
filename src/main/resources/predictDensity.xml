@@ -1,0 +1,48 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
+<etl>
+		<properties>
+        	<include href="messages.properties"/>
+    	</properties>
+        <connection id="db1" driver="$mysql_driver" url="$mysql_redmine_url" user="$mysql_redmine_user" password="$mysql_redmine_password" />
+        <connection id="java" driver="janino"/>
+        <connection id="script" driver="script"/>
+        <connection id="out" driver="$csv_driver" url="$csv_url"/>
+        <connection id="db2" driver="$mysql_driver" url="$mysql_cresta_url" user="$mysql_cresta_user" password="$mysql_cresta_password">
+        </connection>
+        
+
+	    <query connection-id="java">
+
+			    	java.lang.String user = (java.lang.String) get("userid");
+			    	set("user", user); 
+			    	java.lang.System.out.println("***********************" + user);
+			    	next();
+				<query connection-id="db1">
+		        <!--Selects all not closed bugs -->
+					SELECT I.LOCK_VERSION as RELEASE_VERSION,COUNT(I.ID) AS DENSITY
+					 FROM custom_fields c
+					Left join custom_fields_projects cpj on cpj.custom_field_id =(select Id from custom_fields where
+					 name='Module')
+					Left join projects pj on pj.id=cpj.project_id
+					join issues I on I.PROJECT_ID=pj.ID
+					left join custom_values cpv on customized_id=I.id  and cpv.custom_field_id=(select Id from
+					 custom_fields where name='Module')
+					lEFT JOIN trackers T ON T.ID=I.TRACKER_ID
+					Left join issue_statuses ist on ist.id=I.status_id
+					where c.name='Module' and I.project_id= 8
+					group by I.project_id,I.LOCK_VERSION
+  <script connection-id="db2">
+	            	insert into defect_density_version (RELEASE_VERSION, DENSITY, userId) values (?RELEASE_VERSION, ?DENSITY, $user);
+	            </script>
+	            </query>
+				<query connection-id="db2">
+	        <!--Selects all not closed bugs -->
+	        SELECT d.RELEASE_VERSION, d.DENSITY FROM defect_density_version d;       
+		        <script connection-id="out">
+		            $RELEASE_VERSION, $DENSITY
+		        </script>
+	    	 
+					</query>  
+
+	    </query>	    
+</etl>
