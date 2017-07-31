@@ -141,7 +141,7 @@ public class DefectDensityServiceImpl implements DefectDensityService {
 			int graphData[][][] = new int[6][][];
 			graphData[0] = lclValues;
 			graphData[1] = uclValues;
-			graphData[2] = defectDensity;
+			graphData[2] =  defectDensity;
 			graphData[3] = predictedArrayLinearRegression;
 			graphData[4] = predictedArraySVRLinearKernel;
 			graphData[5] = predictedArraySVRRBFKernel;
