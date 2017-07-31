@@ -17,7 +17,7 @@ import com.nttdata.web.usecase1.model.DefectDensityModelTelephonica;
 public class DefectDensityServiceImpl implements DefectDensityService {
 
 	@Autowired
-	@Qualifier(" scriptellaETL")
+	@Qualifier("scriptellaETL")
 	// @Qualifier("talendETL")
 	ETL etlBean;
 
