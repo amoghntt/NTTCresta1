@@ -73,8 +73,6 @@ public class MetricsController {
 			modelAndView = new ModelAndView("defectcountmetrics");
 		} else if (predictionId.equals("FUNCTIONAL_DEFECT_COUNT")) {
 			modelAndView = new ModelAndView("functionaldefectmetrics");
-		} else if (predictionId.equals("DEFECT_COUNT1")) {
-			modelAndView = new ModelAndView("defectcountboa");
 		}
 		modelAndView.addObject("configBean", configBean);
 		modelAndView.addObject("algorithmList",session.getAttribute("ALGORITHMLIST"));

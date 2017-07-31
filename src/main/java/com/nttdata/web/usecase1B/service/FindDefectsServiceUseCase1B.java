@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.nttdata.web.service.ConfigService;
 import com.nttdata.web.usecase1B.model.DefectDeferralModel;
 import com.nttdata.web.usecase1B.model.DefectDeferralModelTelephonica;
-import com.nttdata.web.usecase1B.model.DefectDeferralModelTelephonica;
 import com.nttdata.web.utils.CrestaConstants;
 import com.nttdata.web.utils.CrestaQueryConstants;
 import com.nttdata.web.utils.JubatusUtils;

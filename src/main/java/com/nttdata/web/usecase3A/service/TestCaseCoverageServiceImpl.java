@@ -52,82 +52,76 @@ public class TestCaseCoverageServiceImpl implements TestCaseCoverageService {
 
 		Double testCoverageCriteria = null;
 		Properties prop = new Properties();
-		InputStream input = null;
+    	InputStream input = null;
+    	
+    	try {
 
-		try {
+    		String filename = "config.properties";
+    		input = TestCaseCoverageServiceImpl.class.getClassLoader().getResourceAsStream(filename);
+    		if(input==null){
+    	            System.out.println("Sorry, unable to find " + filename);
+    		    
+    		}
 
-			String filename = "config.properties";
-			input = TestCaseCoverageServiceImpl.class.getClassLoader().getResourceAsStream(filename);
-			if (input == null) {
-				System.out.println("Sorry, unable to find " + filename);
+    		//load a properties file from class path, inside static method
+    		prop.load(input);
 
+                //get the property value and print it out
+    	        testCoverageCriteria = Double.parseDouble(prop.getProperty("coverage"))/100;
+
+    	} catch (IOException ex) {
+    		ex.printStackTrace();
+        } finally{
+        	if(input!=null){
+        		try {
+				input.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-
-			// load a properties file from class path, inside static method
-			prop.load(input);
-
-			// get the property value and print it out
-			testCoverageCriteria = Double.parseDouble(prop.getProperty("coverage")) / 100;
-
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
+        	}
+        }
+    	
+		
 		HashMap<String, Double> resultList = new HashMap<String, Double>();
 		resultList = Java2PythonExecutor.getTestCoverage(ScikitConstants.UC3_LSA_SCRIPT);
 		log.info("resultList = " + resultList);
-		if (resultList != null) {
-			Map<String, Double> sortedResultListMap = new TreeMap<>(
-					Comparator.comparingInt(key -> Integer.parseInt(key.substring(2))));
-			for (Map.Entry<String, Double> entry : resultList.entrySet()) {
-				sortedResultListMap.put(entry.getKey(), entry.getValue());
-			}
-			System.out.println(sortedResultListMap);
-			List<TestCaseCoverageBean> testCaseResultList = new ArrayList<TestCaseCoverageBean>();
-			String relevantTestCase = "O";
-			String irrelevantTestCase = "X";
-			String indeterminateTestCase = "Indeterminate";
-
-			for (Map.Entry<String, Double> entry : sortedResultListMap.entrySet()) {
-				Double value = entry.getValue();
-
-				if (value > testCoverageCriteria) {
-					DecimalFormat df = new DecimalFormat("#.00");
-					Double percentageResult = Double.parseDouble(df.format(value * 100));
-					TestCaseCoverageBean testCaseCoverageBean = new TestCaseCoverageBean();
-					testCaseCoverageBean.setPercentageCoverage(percentageResult.toString() + "%");
-					testCaseCoverageBean.setTestCaseStatus(relevantTestCase);
-					testCaseCoverageBean.setTestCaseId(entry.getKey());
-					testCaseResultList.add(testCaseCoverageBean);
-				} else if (value > 0.00) {
-					DecimalFormat df = new DecimalFormat("#.00");
-					Double percentageResult = Double.parseDouble(df.format(value * 100));
-					TestCaseCoverageBean testCaseCoverageBean = new TestCaseCoverageBean();
-					testCaseCoverageBean.setPercentageCoverage(percentageResult.toString() + "%");
-					testCaseCoverageBean.setTestCaseStatus(irrelevantTestCase);
-					testCaseCoverageBean.setTestCaseId(entry.getKey());
-					testCaseResultList.add(testCaseCoverageBean);
-				} else {
-					TestCaseCoverageBean testCaseCoverageBean = new TestCaseCoverageBean();
-					testCaseCoverageBean.setPercentageCoverage("NA");
-					testCaseCoverageBean.setTestCaseStatus(indeterminateTestCase);
-					testCaseCoverageBean.setTestCaseId(entry.getKey());
-					testCaseResultList.add(testCaseCoverageBean);
-				}
-			}
-			return testCaseResultList;
-		} else {
-			List<TestCaseCoverageBean> testCaseResultList = new ArrayList<TestCaseCoverageBean>();
-			testCaseResultList = null;
-			return testCaseResultList;
+		Map<String, Double> sortedResultListMap = new TreeMap<>(
+		        Comparator.comparingInt(key -> Integer.parseInt(key.substring(2))));
+		for(Map.Entry<String, Double> entry : resultList.entrySet()){
+			sortedResultListMap.put(entry.getKey(), entry.getValue());
 		}
+		System.out.println(sortedResultListMap);
+		List<TestCaseCoverageBean> testCaseResultList = new ArrayList<TestCaseCoverageBean>();
+		String relevantTestCase = "O";
+		String irrelevantTestCase = "X";
+
+		for (Map.Entry<String, Double> entry : sortedResultListMap.entrySet()) {
+			Double value = entry.getValue();
+
+			if (value > testCoverageCriteria) {
+				DecimalFormat df = new DecimalFormat("#.00");
+				Double percentageResult = Double.parseDouble(df.format(value * 100));
+				TestCaseCoverageBean testCaseCoverageBean = new TestCaseCoverageBean();
+				testCaseCoverageBean.setPercentageCoverage(percentageResult.toString() + "%");
+				testCaseCoverageBean.setTestCaseStatus(relevantTestCase);
+				testCaseCoverageBean.setTestCaseId(entry.getKey());
+				testCaseResultList.add(testCaseCoverageBean);
+			} else if (value > 0.00) {
+				DecimalFormat df = new DecimalFormat("#.00");
+				Double percentageResult = Double.parseDouble(df.format(value * 100));
+				TestCaseCoverageBean testCaseCoverageBean = new TestCaseCoverageBean();
+				testCaseCoverageBean.setPercentageCoverage(percentageResult.toString() + "%");
+				testCaseCoverageBean.setTestCaseStatus(irrelevantTestCase);
+				testCaseCoverageBean.setTestCaseId(entry.getKey());
+				testCaseResultList.add(testCaseCoverageBean);
+			} else {
+				TestCaseCoverageBean testCaseCoverageBean = new TestCaseCoverageBean();
+				testCaseCoverageBean.setPercentageCoverage("NA");
+				testCaseCoverageBean.setTestCaseStatus(irrelevantTestCase);
+				testCaseCoverageBean.setTestCaseId(entry.getKey());
+				testCaseResultList.add(testCaseCoverageBean);
+			}
+		}
+		return testCaseResultList;
 	}
 }

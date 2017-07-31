@@ -15,7 +15,45 @@
 	</script>
 	
 <style>
- 
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 40%;
+    top: 15%
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: orange;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 body {
 	background:
 		url("<%=request.getContextPath()%>/resources/images/background1.png")center center fixed;
@@ -263,7 +301,32 @@ border-bottom:4px solid transparent;
 							<li><a href="<%=request.getContextPath()%>/resources/documents/CRESTA_Use Cases.pdf" target="_blank">CRESTA Use Cases</a></li>
 							<li><a href="<%=request.getContextPath()%>/resources/documents/CRESTA _UseCases_Website_rev02.pdf" target="_blank">CRESTA UseCase for future</a></li>
 						</ul></li>
-					
+							<%-- <li><a href="<%=request.getContextPath()%>/resources/documents/CRESTA Scope.pdf" target="_blank">CRESTA Scope</a></li> --%>
+							<%-- <li><a href="#" target="_blank">CRESTA Scope</a></li> --%>
+						
+		
+			<%-- <li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Customers <span class="caret"></span></a>
+						<ul  class="dropdown-menu">
+						<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">BOA <span class="caret1"></span></a>
+                       
+                       <ul  class="dropdown-menu">
+							<li><a href="<%=request.getContextPath()%>/resources/documents/BoA_Cresta_SOW_rev02.pdf" target="_blank">BoA CRESTA SOW</a></li>
+							<li><a href="<%=request.getContextPath()%>/resources/documents/Defect Predictive Modeling(POC)_v03.pdf" target="_blank">Defect Predictive Modeling</a></li>
+							<li><a href="#" target="_blank">BoA CRESTA SOW</a></li>
+							<li><a href="#" target="_blank">Defect Predictive Modeling</a></li>
+						</ul>
+					</li>
+						 <li><a href="#">customer2 <span class="caret1"></span></a></li>
+                    </ul>
+					 </li>  --%>
+					 
+					 
+					 
+					 
 			<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">Knowledge <span class="caret"></span></a>
@@ -287,35 +350,35 @@ border-bottom:4px solid transparent;
 							<li><a href="<%=request.getContextPath()%>/resources/documents/IJCSI-9-5-2-288-296_LiteratureAnalysis.pdf" target="_blank">Literature Analysis</a></li>
                     </ul>
 					 </li> 
-						<!--<li class="dropdown"><a href="#" id="myBtn" class="dropdown-toggle"
+						<li class="dropdown"><a href="#" id="myBtn" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">Settings</a>
 						<!-- Trigger/Open The Modal -->
 
 
- <div id="myModal" class="modal">
+<div id="myModal" class="modal">
 
-  Modal content
+  <!-- Modal content -->
   <div style="height: 70%;" class="modal-content">
   <span class="close">&times;</span>
     
     <div id="tableLeft">
-    <h2>Project</h2>
-    <h2 style = "color:gray;"> Cresta</h2>
+    <!-- <h2>Project</h2>
+    <h2 style = "color:gray;"> Cresta</h2> -->
     </div>
     
     <div></div>
     
-    <div id="tableRight">
+    <!-- <div id="tableRight"> -->
     <div>
     <table border="0" align="center">
     <tr>
      <td><h2> Quality Matrices</h2></td>
     </tr>
-    <input type="checkbox" name="1"> Defect Desity</input><br>
+    <!-- <input type="checkbox" name="1"> Defect Desity</input><br>
     <input type="checkbox" name="2"> Defect Leakage </input><br>   
     <input type="checkbox" name="3"> Defect Defferal</input><br>  
-    <input type="checkbox" name="4"> Defect Rejection</input><br>
+    <input type="checkbox" name="4"> Defect Rejection</input><br> -->
 	</table>
 	</div>
 	
@@ -384,7 +447,7 @@ border-bottom:4px solid transparent;
 		<tr>
 			<th></th>
 			<td><input type="button" value="Save" name="btnSave">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="Cancel"></td>
-			<td><input type="button" value="Cancel"></td>
+			<!-- <td><input type="button" value="Cancel"></td> -->
 		</tr>
 		</form>
 	</table>
@@ -393,9 +456,9 @@ border-bottom:4px solid transparent;
     
   </div>
 
-</div> -->
+</div>
 
-<!-- <script>
+<script>
 
 // Get the modal
 var modal = document.getElementById('myModal');
@@ -434,12 +497,12 @@ window.onclick = function(event) {
     } 
         
 }
-</script> 
+</script>
 	
 
 						
 					
-						</li>-->
+						</li>
 						<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">Copyrights <span class="caret"></span></a>
@@ -452,6 +515,7 @@ window.onclick = function(event) {
 			</div>
 			<!-- /.navbar-collapse -->
 		</div>
+		<!-- /.container-fluid -->
 	</nav>
 	
 </script>

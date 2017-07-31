@@ -1,10 +1,10 @@
 <!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
 <etl>
 	<properties>
-<include href="/D:/config/config.properties"/>
+		<include href="messages.properties" />
 	</properties>
-	<connection id="db1" driver="$mysql_driver" url="$mysql_cresta_url"
-		user="$mysql_cresta_user" password="$mysql_cresta_password" />
+	<connection id="db1" driver="$sqlserver_driver" url="$sqlserver_database_url"
+		user="$sqlserver_user" password="$sqlserver_password" />
 	<connection id="java" driver="janino" />
 	<connection id="script" driver="script" />
 	<connection id="out" driver="$csv_driver" url="$csv_url" />
@@ -25,10 +25,10 @@
 		projectId);
 		next();
 		<query connection-id="db1">
-			select * from UseCaseData_Source;
+			select * from [dbo.UseCaseData];
 			<script connection-id="db2">
-				insert into usecase1CTelephonica (ID,USER_ID, PRED_CODE3, REL_ID, DEFECT_COUNT, KLOC,TEST_CASE_COUNT,APPLICATION_COMPLEXITY,DOMAIN_KNOWLEDGE,TECHNICAL_SKILLS,CODE_REVIEW_COMMENTS, DESIGN_REVIEW_COMMENTS,  REQUIREMENTS_QUERY_COUNT)
-				values ($id,$user_id,'$pred_code3', $rel_id, $defect_count, $KLOC,$test_case_count,	$application_complexity, $domain_knowledge,	$technical_skills, $code_review_comments,$design_review_comments,$requirements_query_count);
+				insert into UseCaseData (USER_ID, PRED_CODE3, REL_ID, DEFECT_COUNT, KLOC,TEST_CASE_COUNT,APPLICATION_COMPLEXITY,DOMAIN_KNOWLEDGE,TECHNICAL_SKILLS,CODE_REVIEW_COMMENTS, DESIGN_REVIEW_COMMENTS,  REQUIREMENTS_QUERY_COUNT)
+				values ($user_id,'$pred_code3', $rel_id, $defect_count, $KLOC,$test_case_count,	$application_complexity, $domain_knowledge,	$technical_skills, $code_review_comments,$design_review_comments,$requirements_query_count);
 			</script>
 		</query>
 	</query>

@@ -22,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.nttdata.web.model.MetricsBean;
 import com.nttdata.web.model.ModuleDetails;
 import com.nttdata.web.model.PredictionBean;
+import com.nttdata.web.usecase1.model.DefectDensityModel;
 import com.nttdata.web.usecase1.model.DefectDensityModelTelephonica;
+import com.nttdata.web.usecase1A.model.DefectAcceptanceModel;
 import com.nttdata.web.usecase1A.model.DefectAcceptanceModelTelephonica;
 import com.nttdata.web.usecase1B.model.DefectDeferralModel;
 import com.nttdata.web.usecase1B.model.DefectDeferralModelTelephonica;
@@ -87,6 +89,35 @@ public class ConfigDAOImpl implements ConfigDAO {
 		return metricsBeanList;
 	}
 
+	/*
+	 * @Override public void deleteDataFromTempDensitytable(int userId, String
+	 * predictionCode) {
+	 * 
+	 * String sqlQuery = ""; if (predictionCode.equals("DEFECT_DENSITY")) {
+	 * sqlQuery = CrestaQueryConstants.QRY_DELETE_DATA; } else if
+	 * (predictionCode.equals("DEFECTIVE_MODULES")) { sqlQuery =
+	 * CrestaQueryConstants.QRY_USECASE2_DELETE_DATA; }
+	 * 
+	 * else if (predictionCode.equals("DEFECT_LEAKAGE")) { sqlQuery =
+	 * CrestaQueryConstants.QRY_USECASE3_DELETE_DATA; } else if
+	 * (predictionCode.equals("DEFECT_ACCEPTANCE_RATE")) { sqlQuery =
+	 * CrestaQueryConstants.QRY_USECASE1A_DELETE_DATA;
+	 * 
+	 * } else if (predictionCode.equals("FUNCTIONAL_DEFECT_COUNT")) { sqlQuery =
+	 * CrestaQueryConstants.QRY_USECASE1D_DELETE_DATA; } else if
+	 * (predictionCode.equals("DEFECT_DEFERRAL_RATE")) { sqlQuery =
+	 * CrestaQueryConstants.QRY_USECASE1B_DELETE_DATA; } else if
+	 * (predictionCode.equals("DEFECT_COUNT")) { sqlQuery =
+	 * CrestaQueryConstants.QRY_USECASE1C_DELETE_DATA; }
+	 * 
+	 * Object[] params = { userId, predictionCode }; // define SQL types of the
+	 * arguments int[] types = { Types.INTEGER, Types.VARCHAR };
+	 * 
+	 * jdbcTemplate.update(sqlQuery, params, types);
+	 * 
+	 * }
+	 */
+
 	private int getMetricsMappingId(int metricsId, String predictionId) {
 		String sqlQuery = CrestaQueryConstants.QRY_GET_METRICS_ID;
 
@@ -142,7 +173,7 @@ public class ConfigDAOImpl implements ConfigDAO {
 	@Override
 	public List<DefectCountModel> getDefectCountData(int userid) {
 		log.debug("ConfigDAOImpl : getDefectDensityData() : call ");
-		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_COUNT_DATA_FOR_USECASE1C_TELEPHONICA;
+		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_COUNT_USECASE1C_TELEPHONICA;
 
 		List<DefectCountModel> defectCountModelList = jdbcTemplate.query(sqlQuery, new Object[] { userid },
 				new RowMapper<DefectCountModel>() {
@@ -168,24 +199,25 @@ public class ConfigDAOImpl implements ConfigDAO {
 	@Override
 	public List<Integer> getDefectDeferralCount(int userid, String predictionCode) {
 		log.debug("ConfigDAOImpl : getDefectDeferralCount() : call ");
-		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_DENSITY_DATA_FOR_USECASE1B_TELEPHONICA;
+		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_DEFERRAL_DATA;
 
-		List<Integer> defectCountList = jdbcTemplate.query(sqlQuery, new Object[] { userid }, new RowMapper<Integer>() {
-			@Override
-			public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
-				Integer defectCount = null;
-				defectCount = rs.getInt("defect_deferral_rate");
+		List<Integer> defectCountList = jdbcTemplate.query(sqlQuery, new Object[] { userid, predictionCode },
+				new RowMapper<Integer>() {
+					@Override
+					public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+						Integer defectCount = null;
+						defectCount = rs.getInt("defect_deferral_rate");
 
-				return defectCount;
-			}
-		});
+						return defectCount;
+					}
+				});
 		return defectCountList;
 	}
 
 	@Override
-	public List<Integer> getDefectAcceptanceCountTelephonica(int userid, String predictionCode) {
+	public List<Integer> getDefectAcceptanceCount(int userid, String predictionCode) {
 		log.debug("ConfigDAOImpl : getDefectAcceptanceCount() : call ");
-		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_DENSITY_DATA_FOR_USECASE1A_TELEPHONICA;
+		String sqlQuery = CrestaQueryConstants.QRY_GET_ACCEPTANCE;
 
 		List<Integer> defectCountList = jdbcTemplate.query(sqlQuery, new Object[] { userid }, new RowMapper<Integer>() {
 			@Override
@@ -200,19 +232,20 @@ public class ConfigDAOImpl implements ConfigDAO {
 	}
 
 	@Override
-	public List<Integer> getDefectDensityCountTelephonica(int userid, String predictionCode) {
-		log.debug("ConfigDAOImpl : getDefectDensityCountTelephonica() : call ");
-		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_DENSITY_DATA_FOR_USECASE1_TELEPHONICA;
+	public List<Integer> getDefectDensityCount(int userid, String predictionCode) {
+		log.debug("ConfigDAOImpl : getDefectDensityCount() : call ");
+		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_DATA;
 
-		List<Integer> defectCountList = jdbcTemplate.query(sqlQuery, new Object[] { userid }, new RowMapper<Integer>() {
-			@Override
-			public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
-				Integer defectCount = null;
-				defectCount = rs.getInt("defect_count") / rs.getInt("KLOC");
+		List<Integer> defectCountList = jdbcTemplate.query(sqlQuery, new Object[] { userid, predictionCode },
+				new RowMapper<Integer>() {
+					@Override
+					public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+						Integer defectCount = null;
+						defectCount = rs.getInt("defect_count") / rs.getInt("KLOC");
 
-				return defectCount;
-			}
-		});
+						return defectCount;
+					}
+				});
 		return defectCountList;
 	}
 
@@ -241,9 +274,9 @@ public class ConfigDAOImpl implements ConfigDAO {
 	}
 
 	@Override
-	public List<Integer> getFunctionalDefectDensityCountTelephonica(int userid, String predictionCode) {
+	public List<Integer> getFunctionalDefectDensityCount(int userid, String predictionCode) {
 		log.debug("ConfigDAOImpl : getFunctionalDefectDensityCount() : call ");
-		String sqlQuery = CrestaQueryConstants.QRY_GET_FUNCTIONAL_DEFECT_COUNT_DATA_FOR_USECASE1D_TELEPHONICA;
+		String sqlQuery = CrestaQueryConstants.QRY_GET_FUNCTIONAL_DEFECT_COUNT;
 
 		List<Integer> defectCountList = jdbcTemplate.query(sqlQuery, new Object[] { userid }, new RowMapper<Integer>() {
 			@Override
@@ -258,9 +291,9 @@ public class ConfigDAOImpl implements ConfigDAO {
 	}
 
 	@Override
-	public List<Integer> getDefectCountTelephonica(int userid, String predictionCode) {
+	public List<Integer> getDefectCount(int userid, String predictionCode) {
 		log.debug("ConfigDAOImpl : getDefectDensityCount() : call ");
-		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_COUNT_DATA_FOR_USECASE1C_TELEPHONICA;
+		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_COUNT_DATA;
 
 		List<Integer> defectCountList = jdbcTemplate.query(sqlQuery, new Object[] { userid }, new RowMapper<Integer>() {
 			@Override
@@ -290,6 +323,7 @@ public class ConfigDAOImpl implements ConfigDAO {
 						defectDeferralModel.setEffortToFixDefect(rs.getInt("effort_to_fix_defect"));
 						defectDeferralModel.setCostToFixDefect(rs.getInt("cost_to_fix_defect"));
 						defectDeferralModel.setImpactOfDefectFix(rs.getInt("impact_of_defect_fix"));
+						// defectDeferralModel.setFeasibilityWithinMilestone(rs.getBoolean("feasibility_within_milestone"));
 						defectDeferralModel.setAvailabilityOfBudget(rs.getInt("availability_of_budget"));
 						defectDeferralModel.setComplexityofDefectFix(rs.getInt("complexity_of_defect_fix"));
 						defectDeferralModel.setUserId(rs.getInt("userid"));
@@ -299,14 +333,14 @@ public class ConfigDAOImpl implements ConfigDAO {
 				});
 		return defectDeferralModelList;
 	}
-
+	
 	@Override
 	public List<DefectDeferralModelTelephonica> getDefectDeferralTelephonicaData(int userid, String pred_code) {
 		log.debug("ConfigDAOImpl : getDefectDensityData() : call ");
 		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_DENSITY_DATA_FOR_USECASE1B_TELEPHONICA;
 
 		List<DefectDeferralModelTelephonica> defectDeferralModelList = jdbcTemplate.query(sqlQuery,
-				new Object[] { userid }, new RowMapper<DefectDeferralModelTelephonica>() {
+				new Object[] { userid}, new RowMapper<DefectDeferralModelTelephonica>() {
 					@Override
 					public DefectDeferralModelTelephonica mapRow(ResultSet rs, int rowNum) throws SQLException {
 						DefectDeferralModelTelephonica defectDeferralModel = new DefectDeferralModelTelephonica();
@@ -316,6 +350,7 @@ public class ConfigDAOImpl implements ConfigDAO {
 						defectDeferralModel.setEffortToFixDefect(rs.getInt("effort_to_fix_defect"));
 						defectDeferralModel.setCostToFixDefect(rs.getInt("cost_to_fix_defect"));
 						defectDeferralModel.setImpactOfDefectFix(rs.getInt("impact_of_defect_fix"));
+						// defectDeferralModel.setFeasibilityWithinMilestone(rs.getBoolean("feasibility_within_milestone"));
 						defectDeferralModel.setAvailabilityOfBudget(rs.getInt("availability_of_budget"));
 						defectDeferralModel.setComplexityofDefectFix(rs.getInt("complexity_of_defect_fix"));
 						defectDeferralModel.setUserId(rs.getInt("user_id"));
@@ -325,6 +360,7 @@ public class ConfigDAOImpl implements ConfigDAO {
 				});
 		return defectDeferralModelList;
 	}
+
 
 	@Override
 	public List<DefectLeakageModel> getDefectLeakageData(int userid, String predictionCode) {
@@ -380,6 +416,7 @@ public class ConfigDAOImpl implements ConfigDAO {
 
 	@Override
 	public Map<String, List<Integer>> getModuleDetails(String moduleName, String predictionCode) {
+		// TODO Auto-generated method stub
 		String sqlQuery = CrestaQueryConstants.QRY_GET_MODULE_DETAILS;
 		List<Integer> defectDensityList = new ArrayList<Integer>();
 		List<Integer> defectRejectionList = new ArrayList<Integer>();
@@ -517,14 +554,14 @@ public class ConfigDAOImpl implements ConfigDAO {
 
 	@Override
 	public List<FunctionalDefectCountModel> getFunctionalDefectData(int userid) {
-		String sqlQuery = CrestaQueryConstants.QRY_GET_FUNCTIONAL_DEFECT_COUNT_DATA_FOR_USECASE1D_TELEPHONICA;
+		String sqlQuery = CrestaQueryConstants.QRY_GET_FUNCTIONAL_DEFECT_COUNT;
 		List<FunctionalDefectCountModel> functionalDefectCountModelList = jdbcTemplate.query(sqlQuery,
 				new Object[] { userid }, new RowMapper<FunctionalDefectCountModel>() {
 					@Override
 					public FunctionalDefectCountModel mapRow(ResultSet rs, int rowNum) throws SQLException {
 						FunctionalDefectCountModel functionalDefectCountModel = new FunctionalDefectCountModel();
 
-						functionalDefectCountModel.setRelease((rs.getInt("rel_id")));
+						functionalDefectCountModel.setRelease((rs.getInt("release_version")));
 						functionalDefectCountModel.setDefectCount((rs.getInt("defect_count")));
 						functionalDefectCountModel.setKiloLinesOfCode(rs.getInt("KLOC"));
 						functionalDefectCountModel.setTestCaseCount(rs.getInt("test_case_count"));
@@ -542,18 +579,44 @@ public class ConfigDAOImpl implements ConfigDAO {
 	}
 
 	@Override
+	public List<DefectDensityModel> getDefectDensityDataForUseCase1(int userid) {
+
+		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_DENSITY_DATA_FOR_USECASE1;
+		List<DefectDensityModel> defectDensityModel = jdbcTemplate.query(sqlQuery, new Object[] { userid },
+				new RowMapper<DefectDensityModel>() {
+					@Override
+					public DefectDensityModel mapRow(ResultSet rs, int rowNum) throws SQLException {
+						DefectDensityModel defectDensityModel = new DefectDensityModel();
+
+						defectDensityModel.setRelease((rs.getInt("release_version")));
+						defectDensityModel.setDefectDensity(Math.round(rs.getInt("defect_count") / rs.getInt("KLOC")));
+						defectDensityModel.setKiloLinesOfCode(rs.getInt("KLOC"));
+						defectDensityModel.setTestCaseCount(rs.getInt("test_case_count"));
+						defectDensityModel.setApplicationComplexity(rs.getInt("application_complexity"));
+						defectDensityModel.setDomainKnowledge(rs.getInt("domain_knowledge"));
+						defectDensityModel.setTechnicalSkills(rs.getInt("technical_skills"));
+						defectDensityModel.setRequirementQueryCount(rs.getInt("requirements_query_count"));
+						defectDensityModel.setCodeReviewComments((rs.getInt("code_review_comments")));
+						defectDensityModel.setDesignReviewComments((rs.getInt("design_review_comments")));
+						return defectDensityModel;
+					}
+				});
+		return defectDensityModel;
+
+	}
+	
+	@Override
 	public List<DefectDensityModelTelephonica> getDefectDensityDataForUseCase1Telephonica(int userid) {
 
 		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_DENSITY_DATA_FOR_USECASE1_TELEPHONICA;
-		List<DefectDensityModelTelephonica> defectDensityModelTelephonica = jdbcTemplate.query(sqlQuery,
-				new Object[] { userid }, new RowMapper<DefectDensityModelTelephonica>() {
+		List<DefectDensityModelTelephonica> defectDensityModelTelephonica = jdbcTemplate.query(sqlQuery, new Object[] { userid },
+				new RowMapper<DefectDensityModelTelephonica>() {
 					@Override
 					public DefectDensityModelTelephonica mapRow(ResultSet rs, int rowNum) throws SQLException {
 						DefectDensityModelTelephonica defectDensityModelTelephonica = new DefectDensityModelTelephonica();
 						defectDensityModelTelephonica.setRel_Id(rs.getInt("rel_id"));
-						defectDensityModelTelephonica.setDefectCount(rs.getInt("defect_count"));
-						defectDensityModelTelephonica
-								.setDefectDensity(Math.round(rs.getInt("defect_count") / rs.getInt("KLOC")));
+						defectDensityModelTelephonica.setDefectCount(rs.getInt("defect_count"));			
+						defectDensityModelTelephonica.setDefectDensity(Math.round(rs.getInt("defect_count") / rs.getInt("KLOC")));
 						defectDensityModelTelephonica.setKiloLinesOfCode(rs.getInt("KLOC"));
 						defectDensityModelTelephonica.setTestCaseCount(rs.getInt("test_case_count"));
 						defectDensityModelTelephonica.setApplicationComplexity(rs.getInt("application_complexity"));
@@ -570,10 +633,38 @@ public class ConfigDAOImpl implements ConfigDAO {
 		return defectDensityModelTelephonica;
 
 	}
+	
+	
+
+	public List<DefectAcceptanceModel> getDefectAcceptanceData(int userid) {
+		String sqlQuery = CrestaQueryConstants.QRY_GET_ACCEPTANCE;
+		List<DefectAcceptanceModel> defectAcceptanceModelList = jdbcTemplate.query(sqlQuery, new Object[] { userid },
+				new RowMapper<DefectAcceptanceModel>() {
+					@Override
+					public DefectAcceptanceModel mapRow(ResultSet rs, int rowNum) throws SQLException {
+						DefectAcceptanceModel defectAcceptanceModel = new DefectAcceptanceModel();
+
+						defectAcceptanceModel.setRelease((rs.getInt("release_version")));
+						defectAcceptanceModel.setDefectAcceptance((rs.getInt("acceptance")));
+						defectAcceptanceModel.setKiloLinesOfCode(rs.getInt("KLOC"));
+						defectAcceptanceModel.setTestCaseCount(rs.getInt("test_case_count"));
+						defectAcceptanceModel.setApplicationComplexity(rs.getInt("application_complexity"));
+						defectAcceptanceModel.setDomainKnowledge(rs.getInt("domain_knowledge"));
+						defectAcceptanceModel.setTechnicalSkills(rs.getInt("technical_skills"));
+						defectAcceptanceModel.setRequirementQueryCount(rs.getInt("requirements_query_count"));
+						defectAcceptanceModel.setCodeReviewComments((rs.getInt("code_review_comments")));
+						defectAcceptanceModel.setDesignReviewComments((rs.getInt("design_review_comments")));
+						return defectAcceptanceModel;
+					}
+				});
+		return defectAcceptanceModelList;
+	}
+	
+	
 	public List<DefectAcceptanceModelTelephonica> getDefectAcceptanceDataTelephonica(int userid) {
 		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_DENSITY_DATA_FOR_USECASE1A_TELEPHONICA;
-		List<DefectAcceptanceModelTelephonica> defectAcceptanceModelList = jdbcTemplate.query(sqlQuery,
-				new Object[] { userid }, new RowMapper<DefectAcceptanceModelTelephonica>() {
+		List<DefectAcceptanceModelTelephonica> defectAcceptanceModelList = jdbcTemplate.query(sqlQuery, new Object[] { userid },
+				new RowMapper<DefectAcceptanceModelTelephonica>() {
 					@Override
 					public DefectAcceptanceModelTelephonica mapRow(ResultSet rs, int rowNum) throws SQLException {
 						DefectAcceptanceModelTelephonica defectAcceptanceModelTelephonica = new DefectAcceptanceModelTelephonica();
@@ -585,8 +676,7 @@ public class ConfigDAOImpl implements ConfigDAO {
 						defectAcceptanceModelTelephonica.setApplicationComplexity(rs.getInt("application_complexity"));
 						defectAcceptanceModelTelephonica.setDomainKnowledge(rs.getInt("domain_knowledge"));
 						defectAcceptanceModelTelephonica.setTechnicalSkills(rs.getInt("technical_skills"));
-						defectAcceptanceModelTelephonica
-								.setRequirementQueryCount(rs.getInt("requirements_query_count"));
+						defectAcceptanceModelTelephonica.setRequirementQueryCount(rs.getInt("requirements_query_count"));
 						defectAcceptanceModelTelephonica.setCodeReviewComments((rs.getInt("code_review_comments")));
 						defectAcceptanceModelTelephonica.setDesignReviewComments((rs.getInt("design_review_comments")));
 						return defectAcceptanceModelTelephonica;
@@ -594,4 +684,7 @@ public class ConfigDAOImpl implements ConfigDAO {
 				});
 		return defectAcceptanceModelList;
 	}
+	
+	
+
 }

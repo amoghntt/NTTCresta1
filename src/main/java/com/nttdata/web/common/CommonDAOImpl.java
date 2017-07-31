@@ -31,6 +31,7 @@ public class CommonDAOImpl implements CommonDAO {
 
 		String sqlQuery = "";
 		if (predictionCode.equals("DEFECT_DENSITY")) {
+			//sqlQuery = CrestaQueryConstants.QRY_USECASE1_DELETE_DATA;
 			sqlQuery = CrestaQueryConstants.QRY_USECASE1_TELEPHONICA_DELETE_DATA;
 		} else if (predictionCode.equals("DEFECTIVE_MODULES")) {
 			sqlQuery = CrestaQueryConstants.QRY_USECASE2_DELETE_DATA;
@@ -44,18 +45,20 @@ public class CommonDAOImpl implements CommonDAO {
 		} else if (predictionCode.equals("FUNCTIONAL_DEFECT_COUNT")) {
 			sqlQuery = CrestaQueryConstants.QRY_USECASE1D_TELEPHONICA_DELETE_DATA;
 		} else if (predictionCode.equals("DEFECT_DEFERRAL_RATE")) {
+			//sqlQuery = CrestaQueryConstants.QRY_USECASE1B_DELETE_DATA;
 			sqlQuery = CrestaQueryConstants.QRY_USECASE1B_TELEPHONICA_DELETE_DATA;
 		} else if (predictionCode.equals("DEFECT_COUNT")) {
 			sqlQuery = CrestaQueryConstants.QRY_USECASE1C_TELEPHONICA_DELETE_DATA;
 		}
-		Object[] params = { userId, predictionCode };
+
+		Object[] params = { userId };
 		// define SQL types of the arguments
-		int[] types = { Types.INTEGER, Types.VARCHAR };
+		int[] types = { Types.INTEGER };
 
 		jdbcTemplate.update(sqlQuery, params, types);
 
 	}
-
+	
 	@Override
 	public void saveData(MetricsBean metricsBean) {
 		String sqlQuery = CrestaQueryConstants.QRY_UPDATE_DATA;
@@ -68,7 +71,7 @@ public class CommonDAOImpl implements CommonDAO {
 
 		jdbcTemplate.update(sqlQuery, params, types);
 	}
-
+	
 	private int getMetricsMappingId(int metricsId, String predictionId) {
 		String sqlQuery = CrestaQueryConstants.QRY_GET_METRICS_ID;
 
@@ -87,11 +90,11 @@ public class CommonDAOImpl implements CommonDAO {
 
 		return mappingId.get(0);
 	}
-
+	
 	@Override
 	public List<AlgorithmBean> getAlgorithmListForUser() {
 		String sqlQuery = CrestaQueryConstants.QRY_GET_ALGORITHM_LIST;
-		List<AlgorithmBean> algorithmList = jdbcTemplate.query(sqlQuery, new Object[] {},
+		List<AlgorithmBean> algorithmList = jdbcTemplate.query(sqlQuery, new Object[] { },
 				new RowMapper<AlgorithmBean>() {
 
 					@Override
@@ -105,5 +108,7 @@ public class CommonDAOImpl implements CommonDAO {
 
 		return algorithmList;
 	}
+
+
 
 }

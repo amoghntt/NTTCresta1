@@ -134,6 +134,7 @@ public class DefectAcceptanceController {
 		modelView.addObject("predictionColour", colorEnum.getColorValue());
 		
 		int actualValue = defectCountList.get(defectCountList.size()-1);
+		double accuracy = 100 - (Math.abs(predictedValue - actualValue) * 100 / predictedValue);
 		int maxDefect = Collections.max(defectCountList);
 		maxDefect = (ucl[0] > maxDefect) ? ((ucl[0] > predictedValue) ? ucl[0] : predictedValue) : ((maxDefect > predictedValue) ? maxDefect : predictedValue);
 		int lastStepY = CrestaQueryConstants.STEP_SIZE - (maxDefect % CrestaQueryConstants.STEP_SIZE);

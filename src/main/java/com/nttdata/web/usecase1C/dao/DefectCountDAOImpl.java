@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
-import com.nttdata.web.model.ReleaseDetails;
 import com.nttdata.web.usecase1C.model.DefectCountModel;
 import com.nttdata.web.utils.CrestaQueryConstants;
 
@@ -43,7 +41,7 @@ public class DefectCountDAOImpl implements DefectCountDAO {
 
 	@Override
 	public List<DefectCountModel> getDefectCountData(int userid) {
-		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_COUNT_DATA_FOR_USECASE1C_TELEPHONICA;
+		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_COUNT_USECASE1C_TELEPHONICA;
 
 		List<DefectCountModel> defectCountModelList = jdbcTemplate.query(sqlQuery, new Object[] { userid },
 				new RowMapper<DefectCountModel>() {
@@ -66,39 +64,5 @@ public class DefectCountDAOImpl implements DefectCountDAO {
 				});
 		return defectCountModelList;
 	}
-	@Override
-	public List<ReleaseDetails> getLastTenPredictions(int algorithmId) {
-		// TODO Auto-generated method stub
-		String sqlQuery = CrestaQueryConstants.QRY_GET_LAST_TEN_PREDICTIONS_DEFECT_COUNT;
-
-		List<ReleaseDetails> lastTenPredictions = jdbcTemplate.query(sqlQuery, new Object[] {},
-				new RowMapper<ReleaseDetails>() {
-					@Override
-					public ReleaseDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
-						ReleaseDetails lastPrediction = new ReleaseDetails();
-						lastPrediction.setReleaseid(rs.getInt("releaseid"));
-						switch (algorithmId) {
-						case 0:
-							lastPrediction.setPredictedValueInt(rs.getInt("uc1CJubatus"));
-							break;
-						case 2:
-							lastPrediction.setPredictedValueInt(rs.getInt(" uc1CLinearRegression"));
-							break;
-						case 3:
-							lastPrediction.setPredictedValueInt(rs.getInt("uc1CSVRLinear"));
-							break;
-						case 4:
-							lastPrediction.setPredictedValueInt(rs.getInt(" uc1CSVRRBF"));
-							break;
-						default:
-							break;
-						}
-
-						return lastPrediction;
-					}
-				});
-		return lastTenPredictions;
-	}
 
 }
-

@@ -85,15 +85,9 @@ public class TestCaseCoverageController extends HttpServlet {
 
 		List<TestCaseCoverageBean> testCaseResultList = new ArrayList<TestCaseCoverageBean>();
 		testCaseResultList = testCaseCoverageService.getTestCaseCoverageResult();
-		ModelAndView model = null;
-		if(testCaseResultList != null){
-		model = new ModelAndView("testCoverageResult");
+		ModelAndView model = new ModelAndView("testCoverageResult");
 		model.addObject("projectName", projectName);
 		model.addObject("resultTestCoverage", testCaseResultList);
-		
-		}else{
-			model = new ModelAndView("error");
-		}
 		return model;
 	}
 

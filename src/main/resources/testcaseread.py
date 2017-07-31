@@ -19,7 +19,7 @@ def preProcessString( sentence ):
 
 def readTestCasesFromExcelFile():
 	"This function reads testcases from excel file and writes it to text file"
-	workbook = xlrd.open_workbook('/opt/apache-tomcat-8.0.36/webapps/resources1/test-case.xlsm')  #open workbook or Excel file
+	workbook = xlrd.open_workbook('test-case.xlsm')  #open workbook or Excel file
         pointSheets = workbook.sheet_names()
         listTestSheetNames = ['test_case', 'Test_Cases', 'test-cases','test-case','Test-Cases','Test_Case','Test Cases']
         sheetName = None
@@ -103,7 +103,7 @@ def readTestCasesFromExcelFile():
 										 
 
 	#Loop to write all dynamically created Lists to text file
-	thefile = open('/opt/apache-tomcat-8.0.36/webapps/resources1/textrequirementprocessed.txt', 'a')
+	thefile = open('textrequirementprocessed.txt', 'a')
 	k = i
 	index = 1
 	list_string = "List_"

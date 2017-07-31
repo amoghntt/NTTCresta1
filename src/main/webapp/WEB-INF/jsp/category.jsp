@@ -9,38 +9,32 @@
 
 
 <head>
- <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/button-style.css">
 <meta charset="UTF-8">
 <title>Line Chart Test</title>
 
 </head>
-<script type="text/javascript" src="<c:url value="/resources/js/jquery.min.js"/>"> </script>
-<script type="text/javascript" src="<c:url value="/resources/js/jquery-ui.min.js"/>"> </script>
-<script type="text/javascript" src="<c:url value="/resources/js/jquery-ui.js"/>"> </script>
-<script type="text/javascript" src="<c:url value="/resources/js/metricsvalidations.js"/>"> </script>
 <body>
 
 <form:form method="post">
-<div id="defects" class="tabcontent">
-		<table  align="center" style="font-family: Verdana;font-weight: bold; color:#FF8C00">
+		<table class="table" align="center" >
 			<tr>
 				<td>Project</td>
 				<td>${configBean.projectBean.projectName}</td>
 			</tr>
 			<tr>
-				<td>Prediction  &nbsp;</td>
+				<td>Prediction</td>
 				<td>${configBean.predictBean.predictDescription}</td>
 			</tr>
 			<tr>
 				<td>Trend</td>
-				<td>Module Wise</td>
+				<td>MODULE WISE</td>
 			</tr>
 			</table >
 			<table  align="center" border = "1">
 			<tr>
-				<td bgcolor="red" align="center" style="padding-left: 10px;;padding-right: 10px">High Risk</td>
-				<td bgcolor="amber" style="padding-left: 15px;padding-right: 15px" align="center">Risk</td>
-				<td bgcolor="green" style="padding-left: 10px;;padding-right: 10px" align="center">Normal</td>
+				<td bgcolor="red">High Risk</td>
+				<td bgcolor="amber">Risk</td>
+				<td bgcolor="green">Normal</td>
 			</tr>
 
 			<c:forEach var="displayList" items="${moduleDisplayList}"
@@ -66,7 +60,7 @@
 
 
 		</table>
-</div>
+
 	</form:form>
 </body>
 </html>

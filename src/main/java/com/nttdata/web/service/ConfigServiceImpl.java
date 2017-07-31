@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
 import com.nttdata.web.dao.ConfigDAO;
 import com.nttdata.web.model.ConfigBean;
 import com.nttdata.web.model.MetricsBean;
 import com.nttdata.web.model.ModuleDetails;
 import com.nttdata.web.model.PredictedModel;
 import com.nttdata.web.model.PredictionBean;
+import com.nttdata.web.usecase1.model.DefectDensityModel;
 import com.nttdata.web.usecase1.model.DefectDensityModelTelephonica;
+import com.nttdata.web.usecase1A.model.DefectAcceptanceModel;
 import com.nttdata.web.usecase1A.model.DefectAcceptanceModelTelephonica;
 import com.nttdata.web.usecase1B.model.DefectDeferralModel;
 import com.nttdata.web.usecase1B.model.DefectDeferralModelTelephonica;
@@ -93,6 +93,12 @@ public class ConfigServiceImpl implements ConfigService {
 		return etlBean.interactETLForUclLcl("calculateUclLcl", null, metricsId, null, redmineProjectId, defectCount);
 	}
 
+	/*@Override
+	public List<Integer> processTask(String useCaseType, String predictionId, String metricsId, String userId,
+			int redmineProjectId) {
+		return etlBean.interactETL(useCaseType, predictionId, metricsId, userId, redmineProjectId);
+	}*/
+
 	public ETL getEtlBean() {
 		return etlBean;
 	}
@@ -115,25 +121,35 @@ public class ConfigServiceImpl implements ConfigService {
 	public List<DefectLeakageModel> getDefectDensityData(int userid) {
 		return configDAO.getDefectDensityData(userid);
 	}
+
+	@Override
+	public List<DefectDensityModel> getDefectDensityDataForUseCase1(int userid) {
+		return configDAO.getDefectDensityDataForUseCase1(userid);
+	}
 	
+	@Override
+	public List<DefectAcceptanceModel> getDefectAcceptanceData(int userId) {
+		return configDAO.getDefectAcceptanceData(userId);
+	}
+
 	@Override
 	public List<DefectAcceptanceModelTelephonica> getDefectAcceptanceDataTelephonica(int userId) {
 		return configDAO.getDefectAcceptanceDataTelephonica(userId);
 	}
 	
 	@Override
-	public List<Integer> getDefectDeferralCountTelephonica(int userid, String predictionCode) {
+	public List<Integer> getDefectDeferralCount(int userid, String predictionCode) {
 		return configDAO.getDefectDeferralCount(userid, predictionCode);
 	}
 
 	@Override
-	public List<Integer> getDefectAcceptanceCountTelephonica(int userid, String predictionCode) {
-		return configDAO.getDefectAcceptanceCountTelephonica(userid, predictionCode);
+	public List<Integer> getDefectAcceptanceCount(int userid, String predictionCode) {
+		return configDAO.getDefectAcceptanceCount(userid, predictionCode);
 	}
 
 	@Override
-	public List<Integer> getDefectDensityCountTelephonica(int userid, String predictionCode) {
-		return configDAO.getDefectDensityCountTelephonica(userid, predictionCode);
+	public List<Integer> getDefectDensityCount(int userid, String predictionCode) {
+		return configDAO.getDefectDensityCount(userid, predictionCode);
 	}
 	
 	@Override
@@ -143,13 +159,13 @@ public class ConfigServiceImpl implements ConfigService {
 
 
 	@Override
-	public List<Integer> getFunctionalDefectDensityCountTelephonica(int userid, String predictionCode) {
-		return configDAO.getFunctionalDefectDensityCountTelephonica(userid, predictionCode);
+	public List<Integer> getFunctionalDefectDensityCount(int userid, String predictionCode) {
+		return configDAO.getFunctionalDefectDensityCount(userid, predictionCode);
 	}
 
 	@Override
-	public List<Integer> getDefectCountTelephonica(int userid, String predictionCode) {
-		return configDAO.getDefectCountTelephonica(userid, predictionCode);
+	public List<Integer> getDefectCount(int userid, String predictionCode) {
+		return configDAO.getDefectCount(userid, predictionCode);
 	}
 
 	@Override
@@ -213,6 +229,7 @@ public class ConfigServiceImpl implements ConfigService {
 
 	@Override
 	public List<DefectDensityModelTelephonica> getDefectDensityDataForUseCase1Telephonica(int userid) {
+		// TODO Auto-generated method stub
 		return configDAO.getDefectDensityDataForUseCase1Telephonica(userid);
 	}
 

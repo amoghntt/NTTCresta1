@@ -17,8 +17,8 @@
 
 
 	<form:form method="post">
-		<table  align="center"
-			style="font-family: Verdana; font-weight: bold; color:#FF8C00">
+		<table class="table" align="center"
+			style="font-family: Verdana; font-weight: bold;">
 			<tr>
 				<td>Project</td>
 				<td>${configBean.projectBean.projectName}</td>
@@ -29,7 +29,7 @@
 			</tr>
 			<tr>
 				<td>Trend</td>
-				<td>Release Wise</td>
+				<td>RELEASE WISE</td>
 			</tr>
 			<tr>
 				<td colspan="2" align="center" bgcolor="${colourOfModule}">

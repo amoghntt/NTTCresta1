@@ -29,21 +29,16 @@
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-	<bean id="crestaProperties"
-    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
- <property name="location" value="file:////D:/config/config.properties" />
-</bean>
-	
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
 	<!-- DataSource configuration of database -->
-		<bean id="dataSource"
+	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<!-- <property name="url" value="jdbc:mysql://10.248.3.91:3306/cresta" /> -->
-		<property name="url" value="${mysql_cresta_url}" />
-		<property name="username" value="${mysql_cresta_user}" />
-		<property name="password" value="${mysql_cresta_password}" />
+		<property name="url" value="jdbc:mysql://10.248.3.91:3306/cresta" />
+		<!-- <property name="url" value="jdbc:mysql://localhost:3306/cresta" /> -->
+		<property name="username" value="cresta" />
+		<property name="password" value="cresta" />
 	</bean>
 
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
@@ -52,18 +47,36 @@
 	
 	<bean id="dataSource1"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<!-- <property name="url" value="jdbc:mysql://10.248.3.91:3306/cresta" /> -->
-		<property name="url" value="${mysql_cresta_url}" />
-		<property name="username" value="${mysql_cresta_user}" />
-		<property name="password" value="${mysql_cresta_password}" />
-		
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="url" value="jdbc:sqlserver://10.232.40.135:1433;DatabaseName=isd_data_portal_synergy_jan_20;integratedSecurity=false" />
+		<!-- <property name="url" value="jdbc:mysql://localhost:3306/cresta" /> -->
+		<property name="username" value="sa" />
+		<property name="password" value="Nttdata123" />
 	</bean>
 
 	<bean id="jdbcTelephonicaTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource1"></property>
 	</bean>
-	  <bean id="predictLeakage" class="scriptella.driver.spring.EtlExecutorBean">
+	
+	<!-- <bean id="etlExecutorBean" class="scriptella.driver.spring.EtlExecutorBean">
+        <property name="configLocation" value="classpath:etl.xml"/>
+    </bean> -->
+    <bean id="calculateUclLcl" class="scriptella.driver.spring.EtlExecutorBean">
+        <property name="configLocation" value="classpath:uclLcl.xml"/>
+    </bean>
+    <bean id="predictDensity" class="scriptella.driver.spring.EtlExecutorBean">
+        <!-- <property name="configLocation" value="classpath:predictDensity2.xml"/> -->
+        <property name="configLocation" value="classpath:predictDensityStatic.xml"/>
+        
+    </bean>
+    
+     <bean id="predictDefectCount" class="scriptella.driver.spring.EtlExecutorBean">
+        <!-- <property name="configLocation" value="classpath:predictDensity2.xml"/> -->
+        <property name="configLocation" value="classpath:predictDefectCount.xml"/>
+        
+    </bean>
+    
+    <bean id="predictLeakage" class="scriptella.driver.spring.EtlExecutorBean">
         <!-- <property name="configLocation" value="classpath:predictDensity2.xml"/> -->
         <property name="configLocation" value="classpath:predictDensityStaticUseCase3.xml"/>
         
@@ -72,8 +85,26 @@
     <bean id="defectiveModules" class="scriptella.driver.spring.EtlExecutorBean">
         <property name="configLocation" value="classpath:defectiveModules2.xml"/>
     </bean>
+    <bean id="predictFunctionalDefectCount" class="scriptella.driver.spring.EtlExecutorBean">
+        <!-- <property name="configLocation" value="classpath:predictDensity2.xml"/> -->
+        <property name="configLocation" value="classpath:predictFunctionalDefect.xml"/>
         
-       <bean id="predictDefectDensityUseCaseTelephonica" class="scriptella.driver.spring.EtlExecutorBean">
+    </bean>
+    
+     <bean id="predictDefectDensityForUseCase1" class="scriptella.driver.spring.EtlExecutorBean">
+        <!-- <property name="configLocation" value="classpath:predictDensity2.xml"/> -->
+        <property name="configLocation" value="classpath:predictDefectDensity.xml"/>
+        
+    </bean>
+     <bean id="predictAcceptance" class="scriptella.driver.spring.EtlExecutorBean">
+        <!-- <property name="configLocation" value="classpath:predictDensity2.xml"/> -->
+        <property name="configLocation" value="classpath:predictAcceptance.xml"/>
+    </bean>
+	
+	<bean id="defectDeferral" class="scriptella.driver.spring.EtlExecutorBean">
+        <property name="configLocation" value="classpath:defectDeferral.xml"/>
+    </bean>
+    <bean id="predictDefectDensityUseCaseTelephonica" class="scriptella.driver.spring.EtlExecutorBean">
         <property name="configLocation" value="classpath:predictDefectDensityUseCaseTelephonica.xml"/>
     </bean>
      <bean id="predictDefectDeferralTelephonica" class="scriptella.driver.spring.EtlExecutorBean">
@@ -88,24 +119,33 @@
         <property name="configLocation" value="classpath:predictDefectCountTelephonica.xml"/>
     </bean>
     
-     <bean id="predictFunctionalDefectCountTelephonica" class="scriptella.driver.spring.EtlExecutorBean">
-        <property name="configLocation" value="classpath:predictFunctionalDefectCountTelephonica.xml"/>
+     <bean id="calculateLimitsHelper" class="com.nttdata.web.service.CalculateLimitsHelper">
+        <property name="calculateUclLclExecutorBean" ref="calculateUclLcl"/>
     </bean>
-
+    
      <bean id="scriptellaETL" class="com.nttdata.web.service.ScriptellaETL">
-      <!--   <property name="calculateUclLclExecutorBean" ref="calculateUclLcl"/> -->
+        <property name="calculateUclLclExecutorBean" ref="calculateUclLcl"/>
+        <property name="predictDensityBean" ref="predictDensity"/>
         <property name="predictLeakageBean" ref="predictLeakage"/>
+        <property name="defectDeferralBean" ref="defectDeferral"/>
+        <property name="defectCountBean" ref="predictDefectCount"/>
          <property name="predictDefectDensityUseCaseTelephonicaBean" ref="predictDefectDensityUseCaseTelephonica"/>
          <property name="predictDefectDeferralTelephonicaBean" ref="predictDefectDeferralTelephonica"/>
           <property name="predictDefectAcceptanceTelephonicaBean" ref="predictDefectAcceptanceTelephonica"/>
           <property name="predictDefectCountTelephonicaBean" ref="predictDefectCountTelephonica"/>
-          <property name="predictFunctionalDefectCountTelephonicaBean" ref="predictFunctionalDefectCountTelephonica"/>
         
     </bean>
     
     <bean id="talendETL" class="com.nttdata.web.service.TalendETL">
     </bean>
-   <bean id="messageSource"
+    
+    
+    
+     <bean id="predictDefectDensityHelper" class="com.nttdata.web.service.PredictDefectDensityHelper">
+        <property name="predictDefectDensityExecutorBean" ref="predictDensity"/>
+    </bean>
+    
+    <bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basenames" value="resources/messages" />
 		<property name="defaultEncoding" value="UTF-8" />

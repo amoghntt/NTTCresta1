@@ -89,37 +89,15 @@ public class FunctionalDefectCountController {
 		List<Integer> predictionList = new ArrayList<Integer>();
 		int[][] predictedData= new int[graphData.length][];
 		predictedData = graphData[3];
-		List<ReleaseDetails> releaseDetailsList = new ArrayList<ReleaseDetails>();
-		for (int i = 0; i < predictedData.length; i++) {
-			
-			ReleaseDetails releaseDetails = new ReleaseDetails();
+		
+		for(int i = 0 ; i<predictedData.length;i++)
+		{
 			int[] data = (int[]) predictedData[i];
+		
 			predictionList.add(data[1]);
-			releaseDetails.setRelease(Integer.toString(data[0]));
-			releaseDetails.setPredictedValue(Integer.toString(data[1]));
-			if(i  != (predictedData.length -1)){
-				int actualValue = defectCountList.get(defectCountList.size()-9+i);
-				int predictedValue = predictionList.get(i);
-				List<Integer> getMaxValueList = new ArrayList<Integer>();
-				if(actualValue!=0 || predictedValue !=0){
-				getMaxValueList.add(actualValue);
-				getMaxValueList.add(predictedValue);
-				}else{
-					getMaxValueList.add(1);
-				}
-				double accuracy = 100 -(Math.abs(actualValue - predictedValue) * 100 / Collections.max(getMaxValueList));
-				releaseDetails.setActualValue(Integer.toString(actualValue));
-				releaseDetails.setPredictedValue(Integer.toString(predictedValue));
-				releaseDetails.setAccuracy(Double.toString(accuracy));
-			}else{
-				releaseDetails.setActualValue(CrestaQueryConstants.NOT_APPLICABLE);
-				releaseDetails.setAccuracy(CrestaQueryConstants.NOT_APPLICABLE);
-				releaseDetails.setPredictedValue(predictionList.get(i).toString());
-			}
 			
-			releaseDetailsList.add(releaseDetails);
-
 		}
+		
 		ConfigBean configBean = new ConfigBean();
 		configBean.getProjectBean().setProjectName(commonService.getProjectName(redmineProjectId,
 				(List<ProjectBean>) session.getAttribute("PROJECTLIST")));
@@ -136,7 +114,8 @@ public class FunctionalDefectCountController {
 		ColorEnum colorEnum = Utils.getColorEnum(ucl[0], lcl[0],
 				predictedValue);
 		modelView.addObject("predictionColour", colorEnum.getColorValue());
-		
+		int actualValue = defectCountList.get(defectCountList.size()-1);
+		double accuracy = 100 - (Math.abs(predictedValue - actualValue) * 100 / predictedValue);
 		int maxDefect = Collections.max(defectCountList);
 		maxDefect = (ucl[0] > maxDefect) ? ((ucl[0] > predictedValue) ? ucl[0] : predictedValue) : ((maxDefect > predictedValue) ? maxDefect : predictedValue);
 						
@@ -159,6 +138,23 @@ public class FunctionalDefectCountController {
 		int maxRelease = Collections.max(releaseCountList)+2;
 		
 		int minRelease = Collections.min(releaseCountList);
+		
+List<ReleaseDetails> releaseDetailsList = new ArrayList<ReleaseDetails>(); 
+		
+		ReleaseDetails lastReleaseDetails = new ReleaseDetails();
+		lastReleaseDetails.setRelease(releaseCountList.get(releaseCountList.size()-2).toString());
+		lastReleaseDetails.setActualValue(defectCountList.get(defectCountList.size()-2).toString());
+		lastReleaseDetails.setPredictedValue(CrestaQueryConstants.NOT_APPLICABLE);
+		lastReleaseDetails.setAccuracy(CrestaQueryConstants.NOT_APPLICABLE);
+		
+		
+		ReleaseDetails currentReleaseDetails = new ReleaseDetails();
+		currentReleaseDetails.setRelease(releaseCountList.get(releaseCountList.size()-1).toString());
+		currentReleaseDetails.setActualValue(Integer.toString(actualValue));
+		currentReleaseDetails.setPredictedValue(Integer.toString(predictedValue));
+		currentReleaseDetails.setAccuracy(Double.toString(accuracy));
+		releaseDetailsList.add(lastReleaseDetails);
+		releaseDetailsList.add(currentReleaseDetails);
 		
 		modelView.addObject("maxYValue",maxDefect);
 		modelView.addObject("minYValue",minDefect);

@@ -1,8 +1,5 @@
 package com.nttdata.web.utils;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 import com.jcraft.jsch.Channel;
@@ -13,6 +10,24 @@ import com.jcraft.jsch.Session;
 
 public class JubatusUtils {
 
+//	private static final String userName = "cresta";
+//	private static final String password = "nttdata@123";
+//	private static final String serverUrl = CrestaQueryConstants.HOST; //"10.248.3.91";
+//	private static final int port = 22;
+//	private static final String jubatusEnvironment = "source /opt/jubatus/profile; ";
+//
+//	public static final String JUBACLASSIFIER = "jubaclassifier";
+//	public static final String JUBAREGRESSION = "jubaregression";
+
+//	public static void main(String args[])
+//	{
+//		startJubatus(CrestaConstants.JUBAREGRESSION, CrestaConstants.JUBAREGRESSION_CONFIG_FILE_PATH,
+//				CrestaQueryConstants.PRED_PORT);
+//		
+//		//check using lsof -t -i:9192 on Jubatus server console
+//	}
+	
+	
 	public static boolean startJubatus(String jubatusServer, String configpath, int jubatusPort) {
 		boolean result = false;
 
@@ -44,6 +59,10 @@ public class JubatusUtils {
 			
 			((ChannelExec) channel).setCommand(startCommand);
 			channel.connect();
+			
+//			((ChannelExec) channel).setCommand(" jubaregression -p "+jubatusPort+" --configpath config.json");
+//			channel.connect();
+			
 			Thread.sleep(3000);
 			
 			channel.disconnect();
@@ -92,25 +111,5 @@ public class JubatusUtils {
 			e.printStackTrace();
 		}
 		return result;
-	}
-	
-	@SuppressWarnings("unused")
-	public static String readPropertiesFile(String key) {
-		String propertyValue = null;
-		try {
-			InputStream input = new FileInputStream(CrestaQueryConstants.PROPERTIES_FILE_PATH);
-			if (input == null) {
-				System.out.println("Sorry, unable to find properties file");
-
-			}
-			Properties prop = new Properties();
-			prop.load(input);
-			propertyValue = prop.getProperty(key);
-			System.out.println("Read value from config file "+ propertyValue);
-
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		return propertyValue;
 	}
 }

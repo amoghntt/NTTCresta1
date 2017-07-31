@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,6 @@ public class TestCaseOptimizationServiceImpl implements TestCaseOptimizationServ
 		List<ArrayList<Double>> resultList = Java2PythonExecutor
 				.getTestOptimization(ScikitConstants.UC2_TEST_CASE_OPTIMIZATION_SCRIPT);
 		log.info("resultList = " + resultList);
-		if(resultList !=null){
 		int testId = 1;
 		DecimalFormat df = new DecimalFormat("#.00");
 		Double percentageResult = 0.0;
@@ -41,19 +39,5 @@ public class TestCaseOptimizationServiceImpl implements TestCaseOptimizationServ
 			testId = testId + 1;
 		}
 		return testOptimizationBeanList;
-		}else{
-			List<TestCaseOptimizationBean> testOptimizationBeanList = new ArrayList<TestCaseOptimizationBean>();
-			testOptimizationBeanList = null;
-			return testOptimizationBeanList;
-		}
-	}
-
-	@Override
-	public boolean checkFileExtension(String fileName) {
-		String extension = FilenameUtils.getExtension(fileName);
-		if(extension.equals("xls")|| extension.equals("xlsx")||extension.equals("xlsm")){
-		return true;	
-		}
-		return false;
 	}
 }

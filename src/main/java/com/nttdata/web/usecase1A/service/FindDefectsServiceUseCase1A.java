@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nttdata.web.service.ConfigService;
+import com.nttdata.web.usecase1A.model.DefectAcceptanceModel;
 import com.nttdata.web.usecase1A.model.DefectAcceptanceModelTelephonica;
 import com.nttdata.web.utils.CrestaConstants;
 import com.nttdata.web.utils.CrestaQueryConstants;
@@ -53,6 +54,35 @@ public class FindDefectsServiceUseCase1A {
 			return predictResult;
 		}
 
+		public int start(int userId, String predictionCode) throws Exception {
+			RegressionClient client = null;
+			int predictResult = 0;
+
+			try {
+				client = getJubatusClient();
+				List<DefectAcceptanceModel> defectAcceptanceModelList = fetchDataFromDb(userId, predictionCode);
+				List<ScoredDatum> trainingData = getTrainingData(defectAcceptanceModelList);
+				client.train(trainingData);
+				client.save(CrestaConstants.MODEL_REGRESSION_UC1A_DEFECT_ACCEPTANCE_RATE);
+				client.load(CrestaConstants.MODEL_REGRESSION_UC1A_DEFECT_ACCEPTANCE_RATE);
+				List<Datum> testData = getTestData(defectAcceptanceModelList);
+				List<Float> resultList = client.estimate(testData);
+				double estimatedValue = resultList.get(0).doubleValue();
+				if (estimatedValue < 0.0) {
+					estimatedValue = 0.0;
+				}
+				predictResult = (int) Math.round(estimatedValue);
+				System.out.println("Defect_Acceptance: " + predictResult);
+				System.out.println("\n");
+				System.out.println("\n");
+			} finally {
+				if (null != client) {
+					client.getClient().close();
+				}
+			}
+			return predictResult;
+		}
+		
 		
 		public int startTelephonica(int userId, String predictionCode) throws Exception {
 			RegressionClient client = null;
@@ -95,10 +125,38 @@ public class FindDefectsServiceUseCase1A {
 			return client;
 		}
 		
+		private List<DefectAcceptanceModel> fetchDataFromDb(int userId, String predictionCode) throws IOException {
+			List<DefectAcceptanceModel> defectAcceptanceModelList = configService.getDefectAcceptanceData(userId);
+			return defectAcceptanceModelList;
+		}
+		
+		
 		private List<DefectAcceptanceModelTelephonica> fetchDataFromDbTelephonica(int userId, String predictionCode) throws IOException {
 			List<DefectAcceptanceModelTelephonica> defectAcceptanceModelList = configService.getDefectAcceptanceDataTelephonica(userId);
 			return defectAcceptanceModelList;
-		}		
+		}
+		
+
+		private List<ScoredDatum> getTrainingData(List<DefectAcceptanceModel> defectAcceptanceModelList ) throws IOException {
+			List<ScoredDatum> trainingData = new ArrayList<ScoredDatum>();
+			  for (int counter = 0; counter <defectAcceptanceModelList.size()-1; counter ++ ) {
+		    	   DefectAcceptanceModel defectAcceptanceModel = defectAcceptanceModelList.get(counter);
+		    	   Datum datumTrain = new Datum()
+		                    .addNumber("KLOC", defectAcceptanceModel.getKiloLinesOfCode())
+		                    .addNumber("TestCaseCount", defectAcceptanceModel.getTestCaseCount())
+		                    .addNumber("ApplicationComplexity", defectAcceptanceModel.getApplicationComplexity())
+		                    .addNumber("DomainKnowledge", defectAcceptanceModel.getDomainKnowledge())
+		                    .addNumber("TechnicalSkills", defectAcceptanceModel.getTechnicalSkills())
+		                    .addNumber("RequirementQueryCount", defectAcceptanceModel.getRequirementQueryCount())
+		                    .addNumber("CodeReviewComments", defectAcceptanceModel.getCodeReviewComments())
+		                    .addNumber("DesignReviewComments", defectAcceptanceModel.getDesignReviewComments());
+
+				trainingData.add(new ScoredDatum(defectAcceptanceModel.getDefectAcceptance(), datumTrain));
+			}
+
+			return trainingData;
+		}
+		
 		
 		private List<ScoredDatum> getTrainingDataTelephonica(List<DefectAcceptanceModelTelephonica> defectAcceptanceModelList ) throws IOException {
 			List<ScoredDatum> trainingData = new ArrayList<ScoredDatum>();
@@ -119,7 +177,26 @@ public class FindDefectsServiceUseCase1A {
 
 			return trainingData;
 		}
+		
 
+		private List<Datum> getTestData(List<DefectAcceptanceModel> defectAcceptanceModelList) throws IOException {
+			List<Datum> testData;
+
+	        DefectAcceptanceModel defectAcceptanceModel = defectAcceptanceModelList.get(defectAcceptanceModelList.size()-1);
+	        Datum datumInput = new Datum()
+                    .addNumber("KLOC", defectAcceptanceModel.getKiloLinesOfCode())
+                    .addNumber("TestCaseCount", defectAcceptanceModel.getTestCaseCount())
+                    .addNumber("ApplicationComplexity", defectAcceptanceModel.getApplicationComplexity())
+                    .addNumber("DomainKnowledge", defectAcceptanceModel.getDomainKnowledge())
+                    .addNumber("TechnicalSkills", defectAcceptanceModel.getTechnicalSkills())
+                    .addNumber("RequirementQueryCount", defectAcceptanceModel.getRequirementQueryCount())
+                    .addNumber("CodeReviewComments", defectAcceptanceModel.getCodeReviewComments())
+                    .addNumber("DesignReviewComments", defectAcceptanceModel.getDesignReviewComments());
+	        Datum[] testDataArray = {datumInput};
+			testData = Arrays.asList(testDataArray);
+			return testData;
+		}
+		
 		
 		private List<Datum> getTestDataTelephonica(List<DefectAcceptanceModelTelephonica> defectAcceptanceModelList) throws IOException {
 			List<Datum> testData;

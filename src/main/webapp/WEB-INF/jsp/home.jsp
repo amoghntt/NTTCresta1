@@ -9,7 +9,8 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<%-- <link rel="stylesheet"
+	href="<%=request.getContextPath()%>/resources/css/style.css"> --%>
 
 
 <script type="text/javascript">
@@ -30,16 +31,7 @@ function show(elementId) {
  document.getElementById("id1").disabled=true;
  document.getElementById(elementId).style.display="block";
 }
-function validateQualityPrediction(){
-	var trendId = document.getElementById("trendId");
-	var trendValue = trendId.options[trendId.selectedIndex].value;
-	if(trendValue != 1){
-		 alert("No data available for Trend!");
-		 return false;
-	}else{
-		return true;
-	}
-}
+
 function validateForm1(){
 
 if(document.getElementById("uploadBox1").value == '') {
@@ -49,18 +41,6 @@ if(document.getElementById("uploadBox1").value == '') {
 		alert("Please Enter Requirements!");
 		return false;
 	}
-	
-var file =  document.getElementById('uploadBox1');
-var fileName = file.value;
-var ext = fileName.substring(fileName.lastIndexOf('.') + 1);
-if(ext =="xls" || ext=="xlsx" || ext=="xlsm")
-{
-    return true;
-}
-else{
-    alert("Please Upload Excel Files only!");
-    return false;
-}
 return true;
 }
 
@@ -70,20 +50,8 @@ function checkFileUpload(){
 		  alert("Please select a file!");
 		  return false;
 		}else{
-	
-	var file =  document.getElementById('uploadBox');
-	var fileName = file.value;
-	var ext = fileName.substring(fileName.lastIndexOf('.') + 1);
-
-    if(ext =="xls" || ext=="xlsx" || ext=="xlsm")
-    {
-        return true;
-    }
-    else{
-        alert("Please Upload Excel Files only!");
-        return false;
-    }
-}return true;
+	return true;
+		}
 }
 </script>
 <style type="text/css">
@@ -203,7 +171,6 @@ position:relative;
 
 
 </style>
-
 </head>
 <body>
 <div>
@@ -249,7 +216,7 @@ position:relative;
 						</select></td>
 					<tr><td align="right"><b><font face="Arial" size="5" style="color:#FF8C00;"> Trend: &nbsp;</font></b></td>
 			
-						<td><select name="predictBean.trendParameterBean.parameterId" style="width: 170px;" id="trendId">
+						<td><select name="predictBean.trendParameterBean.parameterId" style="width: 170px;">
 								<option value="1">Release Wise</option>	
 								<option value="2">Module</option>
 								<option value="3">Sprint</option>
@@ -266,7 +233,7 @@ position:relative;
 					<tr/>
 					<tr>
 						<td colspan="2" align="center"><input type="submit" class="myButton" id="btnhome"
-							value="Metrics" onclick="return validateQualityPrediction()" /></td>
+							value="Metrics" /></td>
 					</tr>
 			</table>
 		</form:form>

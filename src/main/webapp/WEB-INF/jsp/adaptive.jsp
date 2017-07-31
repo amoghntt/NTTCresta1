@@ -296,7 +296,6 @@ body {
 			</table>
 		</div>
 
-<br/><br/>
 
 		<div align="center" onclick="show('id1');" style="width: 100%;">
 			<input type="submit" class="button" id="btnhome" value="Predict"
@@ -306,7 +305,11 @@ body {
 
 	<br>
 	<br>
-
+	<div align="center">
+		<form method="get" action="Analysis.jsp">
+			<input type="submit" class="button" id="btnhome" value="ANALYSIS" />
+		</form>
+	</div>
 	</div>
 
 

@@ -49,14 +49,13 @@ public class DefectDefferalDAOImpl implements DefectDefferalDAO {
 				});
 		return defectDeferralModelList;
 	}
-
+	
 	@Override
-	public List<DefectDeferralModelTelephonica> getDefectDefferalAndReleaseTelephonicaData(String userid,
-			String pred_code) {
+	public List<DefectDeferralModelTelephonica> getDefectDefferalAndReleaseTelephonicaData(String userid, String pred_code) {
 		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_DENSITY_DATA_FOR_USECASE1B_TELEPHONICA;
 
 		List<DefectDeferralModelTelephonica> defectDeferralModelList = jdbcTemplate.query(sqlQuery,
-				new Object[] { userid }, new RowMapper<DefectDeferralModelTelephonica>() {
+				new Object[] { userid}, new RowMapper<DefectDeferralModelTelephonica>() {
 					@Override
 					public DefectDeferralModelTelephonica mapRow(ResultSet rs, int rowNum) throws SQLException {
 						DefectDeferralModelTelephonica defectDeferralModel = new DefectDeferralModelTelephonica();
@@ -77,38 +76,24 @@ public class DefectDefferalDAOImpl implements DefectDefferalDAO {
 				});
 		return defectDeferralModelList;
 	}
-
+	
 	@Override
-	public List<ReleaseDetails> getLastTenPredictions(int algorithmId) {
+	public List<ReleaseDetails> getLastTenPredictions() {
 		// TODO Auto-generated method stub
 		String sqlQuery = CrestaQueryConstants.QRY_GET_LAST_TEN_PREDICTIONS_DEFECT_DEFERRAL;
 
-		List<ReleaseDetails> lastTenPredictions = jdbcTemplate.query(sqlQuery, new Object[] {},
-				new RowMapper<ReleaseDetails>() {
+		List<ReleaseDetails> lastTenPredictions = jdbcTemplate.query(sqlQuery,
+				new Object[] {  }, new RowMapper<ReleaseDetails>() {
 					@Override
 					public ReleaseDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
 						ReleaseDetails lastPrediction = new ReleaseDetails();
 						lastPrediction.setReleaseid(rs.getInt("releaseid"));
-						switch (algorithmId) {
-						case 0:
-							lastPrediction.setPredictedValueInt(rs.getInt("uc1BJubatus"));
-							break;
-						case 2:
-							lastPrediction.setPredictedValueInt(rs.getInt("uc1BLinearRegression"));
-							break;
-						case 3:
-							lastPrediction.setPredictedValueInt(rs.getInt("uc1BSVRLinear"));
-							break;
-						case 4:
-							lastPrediction.setPredictedValueInt(rs.getInt("uc1BSVRRBF"));
-							break;
-						default:
-							break;
-						}
-
+						lastPrediction.setPredictedValueInt(rs.getInt("uc1BJubatus"));
 						return lastPrediction;
 					}
 				});
 		return lastTenPredictions;
 	}
+
+
 }

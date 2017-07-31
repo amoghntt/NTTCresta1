@@ -1,7 +1,6 @@
 package com.nttdata.web.common;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.nttdata.web.model.AlgorithmBean;
@@ -23,7 +22,5 @@ public interface CommonService {
 	public List<AlgorithmBean> getAlgorithmListForUser();
 
 	String convertToJSON(HashMap<String, Integer> resultMap);
-	
-	public String convertToJSON(List<LinkedHashMap<String, Integer>> graphData);
-	
+
 }

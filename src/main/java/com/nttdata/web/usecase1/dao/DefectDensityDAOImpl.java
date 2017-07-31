@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.nttdata.web.model.ReleaseDetails;
+import com.nttdata.web.usecase1.model.DefectDensityModel;
 import com.nttdata.web.usecase1.model.DefectDensityModelTelephonica;
 import com.nttdata.web.utils.CrestaQueryConstants;
 
@@ -23,7 +24,34 @@ public class DefectDensityDAOImpl implements DefectDensityDAO {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public List<DefectDensityModelTelephonica> getDefectDensityAndReleaseDataTelephonica(String userId, String predictionId) {
+	public List<DefectDensityModel> getDefectDensityAndReleaseData(String userId) {
+		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_DENSITY_DATA_FOR_USECASE1;
+
+		List<DefectDensityModel> defectDensityModelList = jdbcTemplate.query(sqlQuery,
+				new Object[] { Integer.parseInt(userId) }, new RowMapper<DefectDensityModel>() {
+					@Override
+					public DefectDensityModel mapRow(ResultSet rs, int rowNum) throws SQLException {
+						DefectDensityModel defectDensityModel = new DefectDensityModel();
+
+						defectDensityModel.setRelease((rs.getInt("release_version")));
+						defectDensityModel.setDefectDensity((Math.round(rs.getInt("defect_count")/rs.getInt("KLOC"))));
+						defectDensityModel.setKiloLinesOfCode(rs.getInt("KLOC"));
+						defectDensityModel.setTestCaseCount(rs.getInt("test_case_count"));
+						defectDensityModel.setApplicationComplexity(rs.getInt("application_complexity"));
+						defectDensityModel.setDomainKnowledge(rs.getInt("domain_knowledge"));
+						defectDensityModel.setTechnicalSkills(rs.getInt("technical_skills"));
+						defectDensityModel.setRequirementQueryCount(rs.getInt("requirements_query_count"));
+						defectDensityModel.setCodeReviewComments((rs.getInt("code_review_comments")));
+						defectDensityModel.setDesignReviewComments((rs.getInt("design_review_comments")));
+						return defectDensityModel;
+					}
+				});
+		return defectDensityModelList;
+
+	}
+
+	@Override
+	public List<DefectDensityModelTelephonica> getDefectDensityAndReleaseDataTelephonica(String userId) {
 		// TODO Auto-generated method stub
 		String sqlQuery = CrestaQueryConstants.QRY_GET_DEFECT_DENSITY_DATA_FOR_USECASE1_TELEPHONICA;
 
@@ -34,8 +62,7 @@ public class DefectDensityDAOImpl implements DefectDensityDAO {
 						DefectDensityModelTelephonica defectDensityModelTelephonica = new DefectDensityModelTelephonica();
 
 						defectDensityModelTelephonica.setRelease((rs.getInt("rel_id")));
-						defectDensityModelTelephonica
-								.setDefectDensity((Math.round(rs.getInt("defect_count") / rs.getInt("KLOC"))));
+						defectDensityModelTelephonica.setDefectDensity((Math.round(rs.getInt("defect_count")/rs.getInt("KLOC"))));
 						defectDensityModelTelephonica.setKiloLinesOfCode(rs.getInt("KLOC"));
 						defectDensityModelTelephonica.setTestCaseCount(rs.getInt("test_case_count"));
 						defectDensityModelTelephonica.setApplicationComplexity(rs.getInt("application_complexity"));
@@ -49,14 +76,14 @@ public class DefectDensityDAOImpl implements DefectDensityDAO {
 				});
 		return defectDensityModelListTelephonica;
 	}
-
+	
 	@Override
 	public List<ReleaseDetails> getLastTenPredictions(int algorithmId) {
 		// TODO Auto-generated method stub
 		String sqlQuery = CrestaQueryConstants.QRY_GET_LAST_TEN_PREDICTIONS_DEFECT_DENSITY;
 
-		List<ReleaseDetails> lastTenPredictions = jdbcTemplate.query(sqlQuery, new Object[] {},
-				new RowMapper<ReleaseDetails>() {
+		List<ReleaseDetails> lastTenPredictions = jdbcTemplate.query(sqlQuery,
+				new Object[] {  }, new RowMapper<ReleaseDetails>() {
 					@Override
 					public ReleaseDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
 						ReleaseDetails lastPrediction = new ReleaseDetails();
@@ -77,11 +104,12 @@ public class DefectDensityDAOImpl implements DefectDensityDAO {
 						default:
 							break;
 						}
-
+						
 						return lastPrediction;
 					}
 				});
 		return lastTenPredictions;
 	}
-
+	
+	
 }

@@ -3,23 +3,21 @@ package com.nttdata.web.usecase3.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.nttdata.web.common.CommonService;
 import com.nttdata.web.model.ConfigBean;
 import com.nttdata.web.model.MetricsBean;
 import com.nttdata.web.model.PredictionBean;
 import com.nttdata.web.model.ProjectBean;
 import com.nttdata.web.model.UserBean;
+import com.nttdata.web.service.ConfigService;
 import com.nttdata.web.usecase3.service.DefectLeakageService;
 import com.nttdata.web.utils.ColorEnum;
 import com.nttdata.web.utils.CrestaQueryConstants;
@@ -30,6 +28,9 @@ public class DefectLeakageController {
 
 	@Autowired
 	private DefectLeakageService defectLeakageService;
+
+	@Autowired
+	private ConfigService configService;
 	
 	@Autowired
 	private CommonService commonService;
@@ -89,7 +90,7 @@ public class DefectLeakageController {
 			
 		}
 		ModelAndView modelView = null;
-		modelView = new ModelAndView("predictionLeakage");
+		modelView = new ModelAndView("prediction");
 		ConfigBean configBean = new ConfigBean();
 		configBean.getProjectBean().setProjectName(commonService.getProjectName(redmineProjectId,
 				(List<ProjectBean>) session.getAttribute("PROJECTLIST")));

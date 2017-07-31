@@ -31,7 +31,23 @@ public class ScriptellaETL implements ETL {
 	@Autowired
 	ConfigDAO configDAO;
 
-		public EtlExecutorBean getPredictDefectDeferralTelephonicaBean() {
+	@Autowired
+	@Resource(name = "calculateUclLcl")
+	protected EtlExecutorBean calculateUclLclExecutorBean;
+	
+	@Autowired
+	@Resource(name = "predictDefectCount")
+	protected EtlExecutorBean defectCountBean;
+	
+	@Autowired
+	@Resource(name = "predictDensity")
+	protected EtlExecutorBean predictDensityBean;
+	
+	@Autowired
+	@Resource(name = "predictDefectDensityForUseCase1")
+	protected EtlExecutorBean predictDefectDensityForUseCase1Bean;
+	
+	public EtlExecutorBean getPredictDefectDeferralTelephonicaBean() {
 		return predictDefectDeferralTelephonicaBean;
 	}
 
@@ -39,21 +55,28 @@ public class ScriptellaETL implements ETL {
 		this.predictDefectDeferralTelephonicaBean = predictDefectDeferralTelephonicaBean;
 	}
 
+
+
+
+	@Autowired
+	@Resource(name = "predictAcceptance")
+	protected EtlExecutorBean predictAcceptanceBean;
+	
 	@Autowired
 	@Resource(name = "predictLeakage")
 	protected EtlExecutorBean predictLeakageBean;
 	
-	public EtlExecutorBean getDefectiveModulesBean() {
-		return defectiveModulesBean;
-	}
-
-	public void setDefectiveModulesBean(EtlExecutorBean defectiveModulesBean) {
-		this.defectiveModulesBean = defectiveModulesBean;
-	}
-
 	@Autowired
 	@Resource(name = "defectiveModules")
 	protected EtlExecutorBean defectiveModulesBean;
+
+	@Autowired
+	@Resource(name = "defectDeferral")
+	protected EtlExecutorBean defectDeferralBean;
+	
+	@Autowired
+	@Resource(name = "predictFunctionalDefectCount")
+	protected EtlExecutorBean predictFunctionalDefectBean;
 	
 	@Autowired
 	@Resource(name = "predictDefectDensityUseCaseTelephonica")
@@ -70,19 +93,6 @@ public class ScriptellaETL implements ETL {
 	@Autowired
 	@Resource(name = "predictDefectCountTelephonica")
 	protected EtlExecutorBean predictDefectCountTelephonicaBean;
-	
-	@Autowired
-	@Resource(name = "predictFunctionalDefectCountTelephonica")
-	protected EtlExecutorBean predictFunctionalDefectCountTelephonicaBean;
-
-	public EtlExecutorBean getPredictFunctionalDefectCountTelephonicaBean() {
-		return predictFunctionalDefectCountTelephonicaBean;
-	}
-
-	public void setPredictFunctionalDefectCountTelephonicaBean(
-			EtlExecutorBean predictFunctionalDefectCountTelephonicaBean) {
-		this.predictFunctionalDefectCountTelephonicaBean = predictFunctionalDefectCountTelephonicaBean;
-	}
 
 	public EtlExecutorBean getPredictDefectCountTelephonicaBean() {
 		return predictDefectCountTelephonicaBean;
@@ -103,6 +113,7 @@ public class ScriptellaETL implements ETL {
 	@Override
 	public List<Integer> interactETL(String eTLType, String predictionId, String metricsId,String userId, int redmineProjectId,int algorithmId) {
 		if (eTLType.equalsIgnoreCase("calculateUclLcl")) {
+			//return retrieveUclLclData(String.valueOf(redmineProjectId), Integer.parseInt(metricsId));
 		} 
 		else if (eTLType.equalsIgnoreCase("predictUseCase1")) {
 			return predictUseCase1(userId, String.valueOf(redmineProjectId), predictionId,algorithmId);
@@ -119,8 +130,6 @@ public class ScriptellaETL implements ETL {
 			return predictUseCase1C(userId, String.valueOf(redmineProjectId), predictionId,algorithmId);
 		}else if (eTLType.equalsIgnoreCase("predictUseCase1D")) {
 			return predictUseCase1D(userId, String.valueOf(redmineProjectId), predictionId,algorithmId);
-		}else if (eTLType.equalsIgnoreCase("predictDefectCountBoA")) {
-			return predictDefectCountBoA(userId, String.valueOf(redmineProjectId), predictionId,algorithmId);
 		}
 		return null;
 	}
@@ -135,7 +144,14 @@ public class ScriptellaETL implements ETL {
 	private List<int[]> retrieveUclLclData(String projectId, int metricsId,List<Integer> defectCount) {
 		Map<String,String> properties = new HashMap<String,String>();
 		properties.put("projectId", StringUtils.valueOf(projectId));
-
+		calculateUclLclExecutorBean.setProperties(properties);
+		try {
+			calculateUclLclExecutorBean.setConfiguration(null);
+			calculateUclLclExecutorBean.afterPropertiesSet();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		//calculateUclLclExecutorBean.execute();
 		return jubatusProcessor.computeUclLclData(metricsId,defectCount);
 	}
 	
@@ -149,7 +165,14 @@ public class ScriptellaETL implements ETL {
 	private List<int[]> retrieveUclLclData1(String projectId, int metricsId,List<DefectLeakageModel> defectCount) {
 		Map<String,String> properties = new HashMap<String,String>();
 		properties.put("projectId", StringUtils.valueOf(projectId));
-		
+		calculateUclLclExecutorBean.setProperties(properties);
+		try {
+			calculateUclLclExecutorBean.setConfiguration(null);
+			calculateUclLclExecutorBean.afterPropertiesSet();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		//calculateUclLclExecutorBean.execute();
 		return jubatusProcessor.computeUclLclData1(metricsId,defectCount);
 	}
 
@@ -186,6 +209,14 @@ public class ScriptellaETL implements ETL {
 		
 	}
 	
+	public EtlExecutorBean getDefectCountBean() {
+		return defectCountBean;
+	}
+
+	public void setDefectCountBean(EtlExecutorBean defectCountBean) {
+		this.defectCountBean = defectCountBean;
+	}
+
 	private List<Integer> predictUseCase1B(String userId, String projectId, String predictionId,int algorithmId) {
 		Map<String,String> properties = new HashMap<String,String>();
 		properties.put("userId", userId);
@@ -201,6 +232,20 @@ public class ScriptellaETL implements ETL {
 			e1.printStackTrace();
 		}
 		System.out.println("executed");
+		
+		/*defectDeferralBean.setProperties(properties);
+		try {
+			defectDeferralBean.setConfiguration(null);
+			defectDeferralBean.afterPropertiesSet();
+			defectDeferralBean.execute();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		*/
+		
+		/*DefectDeferralDataImportToCresta redmineDataCopyJob = new DefectDeferralDataImportToCresta();
+		redmineDataCopyJob.runJob(new String []{});*/
+
 		
 		if(algorithmId == 0){
 			return jubatusProcessor.predictDefectDeferralRate(Integer.parseInt(userId),predictionId);
@@ -269,15 +314,15 @@ public class ScriptellaETL implements ETL {
 			properties.put("userId", userId);
 			properties.put("projectId", StringUtils.valueOf(projectId));
 			properties.put("predictionCode", predictionId);
-		
-			predictFunctionalDefectCountTelephonicaBean.setProperties(properties);
+			
+			predictFunctionalDefectBean.setProperties(properties);
 			try {
-				predictFunctionalDefectCountTelephonicaBean.setConfiguration(null);
-				predictFunctionalDefectCountTelephonicaBean.afterPropertiesSet();
+				predictFunctionalDefectBean.setConfiguration(null);
+				predictFunctionalDefectBean.afterPropertiesSet();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			predictFunctionalDefectCountTelephonicaBean.execute();
+			predictFunctionalDefectBean.execute();
 		} catch (EtlExecutorException etlExecutorException) {
 			log.debug("Error executing ETL file" + etlExecutorException);
 			etlExecutorException.printStackTrace();
@@ -293,18 +338,6 @@ public class ScriptellaETL implements ETL {
 		return null;
 	}
 	
-	private List<Integer> predictDefectCountBoA(String userId, String projectId, String predictionId,int algorithmId) {
-		
-		if(algorithmId == 0){
-		return jubatusProcessor.predictDensityForUseCase1D(Integer.parseInt(userId),predictionId);
-		}else if(algorithmId > 1){
-			return jubatusProcessor.predictDefectCountBoA(algorithmId);
-		}else if(algorithmId == 1){
-			return jubatusProcessor.getAllPredictionResultUseCase1D(predictionId, userId, algorithmId);
-		}
-		return null;
-	}
-	
 	
 	private List<Integer> predictUseCase1(String userId, String projectId, String predictionId,int algorithmId) {
 		try {
@@ -312,6 +345,21 @@ public class ScriptellaETL implements ETL {
 			properties.put("userId", userId);
 			properties.put("projectId", StringUtils.valueOf(projectId));
 			properties.put("predictionCode", predictionId);
+			
+/*			predictDefectDensityForUseCase1Bean.setProperties(properties);
+			try {
+				predictDefectDensityForUseCase1Bean.setConfiguration(null);
+				predictDefectDensityForUseCase1Bean.afterPropertiesSet();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			predictDefectDensityForUseCase1Bean.execute();
+		} catch (EtlExecutorException etlExecutorException) {
+			log.debug("Error executing ETL file" + etlExecutorException);
+			etlExecutorException.printStackTrace();
+		}
+		System.out.println("executed");*/
+		
 			predictDefectDensityUseCaseTelephonicaBean.setProperties(properties);
 		try {
 			predictDefectDensityUseCaseTelephonicaBean.setConfiguration(null);
@@ -328,6 +376,7 @@ public class ScriptellaETL implements ETL {
 		if(algorithmId == 0){
 			return jubatusProcessor.predictDensityForUseCase1(Integer.parseInt(userId),predictionId);
 			}else if(algorithmId > 1){
+				//return jubatusProcessor.getPredictionResultUseCase1(predictionId,userId,algorithmId);
 				return jubatusProcessor.getPredictionResultTelephonicaUseCase1(predictionId,userId,algorithmId);
 			}else if(algorithmId == 1){
 				return jubatusProcessor.getAllPredictionResultTelephonicaUseCase1(predictionId, userId, algorithmId);
@@ -335,10 +384,41 @@ public class ScriptellaETL implements ETL {
 			return null;
 		
 	}
+	
+	public EtlExecutorBean getCalculateUclLclExecutorBean() {
+		return calculateUclLclExecutorBean;
+	}
+
+	public void setCalculateUclLclExecutorBean(EtlExecutorBean calculateUclLclExecutorBean) {
+		this.calculateUclLclExecutorBean = calculateUclLclExecutorBean;
+	}
+
+	public EtlExecutorBean getPredictDensityBean() {
+		return predictDensityBean;
+	}
+
+	public void setPredictDensityBean(EtlExecutorBean predictDensityBean) {
+		this.predictDensityBean = predictDensityBean;
+	}
+	
+	
+	
+	public EtlExecutorBean getPredictLeakageBean() {
+		return predictLeakageBean;
+	}
 
 	public void setPredictLeakageBean(EtlExecutorBean predictLeakageBean) {
 		this.predictLeakageBean = predictLeakageBean;
 	}
+
+	public EtlExecutorBean getDefectDeferralBean() {
+		return defectDeferralBean;
+	}
+
+	public void setDefectDeferralBean(EtlExecutorBean defectDeferralBean) {
+		this.defectDeferralBean = defectDeferralBean;
+	}
+
 
 	public EtlExecutorBean getPredictDefectDensityUseCaseTelephonicaBean() {
 		return predictDefectDensityUseCaseTelephonicaBean;

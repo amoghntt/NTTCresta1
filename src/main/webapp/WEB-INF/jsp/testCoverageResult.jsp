@@ -56,15 +56,6 @@
 
 <style type="text/css">
 
-tr.blank_row td {
-  border: 0;
-}
-.blank_row
-{
-    height: 40px !important; /* Overwrite any previous rules */
-    background-color: #FFFFFF;
-}
-
 .tableData {
 	color: #000;
 	font: normal normal 12px Verdana, Geneva, Arial, Helvetica, sans-serif
@@ -202,40 +193,14 @@ td {
 						<td class="tableData"><c:out value="${item.percentageCoverage}" /></td>
 					</tr>
 				</c:forEach>
-				<tr class="blank_row">
-				<td colspan="3"></td>
-				</tr>
-				<tr>
-	<tr><td style="width: 30px;font-weight: bold;">X</td><td style="padding-left: 5px;width: 160px" colspan="2">Non-Relevant Test Cases</tr>
-	<tr>
-	<td style="width: 30px;font-weight: bold;">O</td><td style="padding-left: 5px;width: 160px" colspan="2">Relevant Test Cases</td>
-	</tr>
-	<tr>
-	<td style="width: 30px;font-weight: bold;">NA</td><td style="padding-left: 5px;width: 160px" colspan="2">Indeterminate</td>
-	</tr>
 			</tbody>
 		</table>
 
 	</div>
+	<br />
+	<br />
+	<br />
 	<center>
-	<br><br>
-	<div style="background-color: white; width: 210px ">
-	<table border="1px" bordercolor="black" style="border-spacing: 10px;">
-	
-	<tr>
-	<tr><td style="width: 30px;font-weight: bold;">X</td><td style="padding-left: 5px;width: 180px">Non-Relevant Test Cases</tr>
-	<tr>
-	<td style="width: 30px;font-weight: bold;">O</td><td style="padding-left: 5px;width: 180px">Relevant Test Cases</td>
-	</tr>
-	<tr>
-	<td style="width: 30px;font-weight: bold;">NA</td><td style="padding-left: 5px;width: 180px">Indeterminate</td>
-	</tr>
-	
-	</table></div>
-	<br />
-	<br />
-	
-	
 		<button id="btnExport">Export to excel</button>
 	</center>
 	<br />
@@ -243,7 +208,6 @@ td {
 	<center>
 		<button id="btnExportPDF" onclick="generatePDFFromTable()">Export
 			to PDF</button>
-			
 	</center>
 
 </body>

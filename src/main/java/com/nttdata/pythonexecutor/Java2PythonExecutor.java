@@ -22,7 +22,6 @@ public class Java2PythonExecutor {
 		try {
 			Resource yourfile = new ClassPathResource(python_script_file);
 			String filePath = yourfile.getFile().getAbsolutePath();
-			log.info("filePath = " + filePath);
 			ProcessBuilder pb = new ProcessBuilder(ScikitConstants.PYTHON_COMMAND, filePath, prediction_code, userId);
 			pb.redirectErrorStream(true);
 			Process p = pb.start();
@@ -46,38 +45,6 @@ public class Java2PythonExecutor {
 		return result;
 	}
 
-
-	@SuppressWarnings("unchecked")
-	public static int getPredictionResultBoADefectCount(String python_script_file) {
-		int result = 0;
-		try {
-			Resource yourfile = new ClassPathResource(python_script_file);
-			String filePath = yourfile.getFile().getAbsolutePath();
-			log.info("filePath = " + filePath);
-			ProcessBuilder pb = new ProcessBuilder(ScikitConstants.PYTHON_COMMAND, filePath);
-			pb.redirectErrorStream(true);
-			Process p = pb.start();
-
-			ObjectMapper mapper = null;
-			ArrayList<Double> resultList = null;
-			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			String line = in.readLine();
-			log.info("line = " + line);
-			if (line != null) {
-				mapper = new ObjectMapper();
-				resultList = mapper.readValue(line, ArrayList.class);
-				result = (int) Math.round(resultList.get(0));
-				log.info("Predicted Result = " + result);
-			}
-
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-
-		return result;
-	}
-
-	
 	@SuppressWarnings("unchecked")
 	public static HashMap<String, Double> getTestCoverage(String pythonScript) {
 		HashMap<String, Double> resultList = null;

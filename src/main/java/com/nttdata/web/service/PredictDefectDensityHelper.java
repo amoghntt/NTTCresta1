@@ -37,6 +37,7 @@ public class PredictDefectDensityHelper {
 				System.out.println(userId);
 				metricsList.add(fd.predictData(Integer.parseInt(userId), predictionId));
 			} catch (EtlExecutorException etlExecutorException) {
+				// log.debug("Error executing ETL file" + etlExecutorException);
 				etlExecutorException.printStackTrace();
 			}
 		} catch (Exception ex) {

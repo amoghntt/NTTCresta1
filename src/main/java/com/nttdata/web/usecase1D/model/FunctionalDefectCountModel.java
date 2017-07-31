@@ -12,14 +12,7 @@ public class FunctionalDefectCountModel {
 	private Integer requirementQueryCount;
 	private Integer codeReviewComments;
 	private Integer designReviewComments;
-	private String tprName;
-		
-	public String getTprName() {
-		return tprName;
-	}
-	public void setTprName(String tprName) {
-		this.tprName = tprName;
-	}
+	
 	public Integer getKiloLinesOfCode() {
 		return kiloLinesOfCode;
 	}

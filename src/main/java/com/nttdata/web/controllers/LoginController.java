@@ -61,11 +61,10 @@ public class LoginController {
 
 		String userName = loginBean.getUserName();
 		String password = loginBean.getPassword();
-		ModelAndView modelView = null;
+		ModelAndView modelView = new ModelAndView("home");
 		try {
 			boolean isValidUser = userService.authenticate(userName, password);
 			if (isValidUser) {
-				modelView = new ModelAndView("home");
 				System.out.println("User Login Successful");
 				HttpSession session = request.getSession();
 				UserBean userBean = userService.getUserDetails(userName, password);
@@ -79,15 +78,11 @@ public class LoginController {
 				session.setAttribute("PROJECTLIST", userBean.getProjectBeanList());
 				session.setAttribute("PREDICTLIST", predictList);
 				session.setAttribute("PREDICTMETRICMAPPING", predictMetricMapping);
-				session.setAttribute("configBean", configBean);
 				configBean.setPredictionBeanList(predictList);
 				configBean.setProjectBeanList(userBean.getProjectBeanList());
-				modelView.addObject("loginResult", false);
+
 				modelView.addObject("configBean", configBean);
-				userService.setUserProperties();
 			} else {
-				modelView = new ModelAndView("loginPage");
-				modelView.addObject("loginResult", true);
 				result.addError(new ObjectError("err", "Invalid Credentials"));
 			}
 		} catch (Exception ex) {

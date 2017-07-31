@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-	
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <!DOCTYPE html>
@@ -48,11 +47,23 @@ tr.spaceUnder > td
 </style>
 <script type="text/javascript">
 	function exec() {
-		var loginResult = document.getElementById("loginResult").value;
-		if(loginResult){
-			 alert("Please enter correct Username / Password!");
-		}
-		
+		document.getElementById("back").style.display = "none";
+		document.getElementById("back").disabled = true;
+		document.getElementById("home").style.display = "none";
+		document.getElementById("home").disabled = true;
+		document.getElementById("back").style.display = "none";
+		document.getElementById("back").disabled = true;
+		document.getElementById("logout").style.display = "none";
+		document.getElementById("logout").disabled = true;
+		document.getElementById("headerCresta").style.display = "none";
+		document.getElementById("headerCresta").disabled = true;
+		document.getElementById("headerCresta").style.display = "none";
+		document.getElementById("headerCresta").disabled = true;
+		document.getElementById("ntt_logo").style.display = "none";
+		document.getElementById("ntt_logo").disabled = true;
+		document.getElementById("navbarid").style.display = "none";
+		document.getElementById("navbarid").disabled = true;
+		document.getElementById("main-footer").style.color = "black";
 	}
 </script>
 
@@ -82,8 +93,8 @@ tr.spaceUnder > td
 									&nbsp;</td><td> <input class="pw" type="password" name="password" />
 							</font></b></td>
 					</tr>
-					<tr><td><input type="hidden" value="${loginResult}" id="loginResult"></td></tr>
-<tr class="spaceUnder">
+					<tr class="spaceUnder">
+
 						<td align="center" colspan="4"><input class="myButton" type="submit"
 							value="Login" /></td>
 					</tr>

@@ -8,7 +8,10 @@ import com.nttdata.web.model.MetricsBean;
 import com.nttdata.web.model.ModuleDetails;
 import com.nttdata.web.model.PredictedModel;
 import com.nttdata.web.model.PredictionBean;
+import com.nttdata.web.model.ProjectBean;
+import com.nttdata.web.usecase1.model.DefectDensityModel;
 import com.nttdata.web.usecase1.model.DefectDensityModelTelephonica;
+import com.nttdata.web.usecase1A.model.DefectAcceptanceModel;
 import com.nttdata.web.usecase1A.model.DefectAcceptanceModelTelephonica;
 import com.nttdata.web.usecase1B.model.DefectDeferralModel;
 import com.nttdata.web.usecase1B.model.DefectDeferralModelTelephonica;
@@ -21,9 +24,12 @@ public interface ConfigService {
 
 	public Map<String, List<MetricsBean>> getPredictMetricsMappingService();
 
-	public List<int[]> processTask(String predictionId, int redmineProjectId, List<Integer> defectDensityCountList);
+	public List<int[]> processTask(String predictionId, int redmineProjectId,List<Integer> defectDensityCountList);
 
 	List<Integer> getReleaseDataForUseCase3(String userId, String predictionCode);
+
+/*	List<Integer> processTask(String useCaseType, String predictionId, String metricsId, String userId,
+			int redmineProjectId);*/
 
 	public Map<String, String> validatePredictData(ConfigBean configBean);
 
@@ -32,7 +38,7 @@ public interface ConfigService {
 	public List<String> getAxesLabel(int metricsId);
 
 	List<DefectLeakageModel> getDefectDensityData(int userid);
-
+	
 	public List<DefectDeferralModel> getDefectDeferralData(int userid, String pred_code);
 
 	public Map<String, PredictedModel> processTaskForUseCase2(String useCaseType, String predictionId, String metricsId,
@@ -40,36 +46,36 @@ public interface ConfigService {
 
 	public Map<String, List<ModuleDetails>> getModuleWiseData(int userid, String predictionCode);
 
-	public List<DefectLeakageModel> getDefectLeakageData(int userid, String predictionCode);
+	public List<DefectLeakageModel> getDefectLeakageData(int userid,String predictionCode);
 
+	// public List<Integer> getLeakageData(String userId, String
+	// predictionCode);
 	public List<ModuleDetails> getAvgData(int userId, String predictionCode, String moduleName, int limit);
 
 	public List<ModuleDetails> getAvgDataForDefectDesnity(int userId, String predictionCode, int limit);
 
 	public List<ModuleDetails> getAvgDataForUseCase3(int userId, String predictionCode, int limit);
-
+	
 	public List<ModuleDetails> getAvgDataForDefectDeferral(int userId, String predictionCode, int limit);
 
-	public List<Integer> getDefectDeferralCountTelephonica(int userid, String predictionCode);
-
+	public List<Integer> getDefectDeferralCount(int userid,String predictionCode);
+	
 	public List<FunctionalDefectCountModel> getFunctionalDefectData(int userId);
-
+	
+	public List<DefectDensityModel> getDefectDensityDataForUseCase1(int userid);
+	
 	public List<DefectDensityModelTelephonica> getDefectDensityDataForUseCase1Telephonica(int userid);
-
+	
 	public List<DefectCountModel> getDefectCountData(int userId);
-
-	public List<Integer> getDefectAcceptanceCountTelephonica(int userid, String predictionCode);
-
-	public List<Integer> getDefectCountTelephonica(int userid, String predictionCode);
-
-	public List<Integer> getFunctionalDefectDensityCountTelephonica(int userid, String predictionCode);
-
-	public List<Integer> getDefectDensityCountTelephonica(int userid, String predictionCode);
-
+	public List<Integer> getDefectAcceptanceCount(int userid, String predictionCode) ;
+	public List<Integer> getDefectCount(int userid, String predictionCode);
+	public List<Integer> getFunctionalDefectDensityCount(int userid, String predictionCode);
+	public List<Integer> getDefectDensityCount(int userid, String predictionCode);
+	public List<DefectAcceptanceModel> getDefectAcceptanceData(int userId);
 	public List<DefectAcceptanceModelTelephonica> getDefectAcceptanceDataTelephonica(int userId);
-
-	public List<Integer> getDefectModuleCount(int userid, String predictionCode, Integer metricsId);
+	public List<Integer> getDefectModuleCount(int userid, String predictionCode,Integer metricsId);
 
 	List<DefectDeferralModelTelephonica> getDefectDeferralTelephonicaData(int userid, String pred_code);
-
+	
 }
+

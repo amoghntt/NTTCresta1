@@ -1,5 +1,6 @@
 package com.nttdata.web.talend;
 
+// create application properties with default
 public class ContextProperties extends java.util.Properties {
 
 	private static final long serialVersionUID = 1L;

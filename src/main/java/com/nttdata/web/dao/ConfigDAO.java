@@ -6,7 +6,9 @@ import java.util.Map;
 import com.nttdata.web.model.MetricsBean;
 import com.nttdata.web.model.ModuleDetails;
 import com.nttdata.web.model.PredictionBean;
+import com.nttdata.web.usecase1.model.DefectDensityModel;
 import com.nttdata.web.usecase1.model.DefectDensityModelTelephonica;
+import com.nttdata.web.usecase1A.model.DefectAcceptanceModel;
 import com.nttdata.web.usecase1A.model.DefectAcceptanceModelTelephonica;
 import com.nttdata.web.usecase1B.model.DefectDeferralModel;
 import com.nttdata.web.usecase1B.model.DefectDeferralModelTelephonica;
@@ -20,6 +22,8 @@ public interface ConfigDAO {
 	public List<MetricsBean> getPredictMetricsMapping();
 
 	List<Integer> getReleaseDataForUseCase3(String userId, String predictionCode);
+
+	//void deleteDataFromTempDensitytable(int userid, String predictionCode);
 
 	List<DefectLeakageModel> getDefectDensityData(int userid);
 
@@ -45,21 +49,27 @@ public interface ConfigDAO {
 
 	public List<FunctionalDefectCountModel> getFunctionalDefectData(int userid);
 
-	public List<Integer> getDefectAcceptanceCountTelephonica(int userid, String predictionCode);
+	public List<Integer> getDefectAcceptanceCount(int userid, String predictionCode);
 
-	public List<Integer> getDefectDensityCountTelephonica(int userid, String predictionCode);
+	public List<Integer> getDefectDensityCount(int userid, String predictionCode);
 
-	public List<Integer> getDefectCountTelephonica(int userid, String predictionCode);
+	public List<Integer> getDefectCount(int userid, String predictionCode);
 
 	public List<DefectCountModel> getDefectCountData(int userid);
 
+	public List<DefectDensityModel> getDefectDensityDataForUseCase1(int userid);
+	
 	public List<DefectDensityModelTelephonica> getDefectDensityDataForUseCase1Telephonica(int userid);
 
-	public List<Integer> getFunctionalDefectDensityCountTelephonica(int userid, String predictionCode);
+	public List<Integer> getFunctionalDefectDensityCount(int userid, String predictionCode);
 
+	public List<DefectAcceptanceModel> getDefectAcceptanceData(int userid);
+	
 	public List<DefectAcceptanceModelTelephonica> getDefectAcceptanceDataTelephonica(int userid);
 
 	public List<Integer> getDefectModuleCount(int userid, String predictionCode, Integer metricsId);
 
 	List<DefectDeferralModelTelephonica> getDefectDeferralTelephonicaData(int userid, String pred_code);
+	
+
 }

@@ -1,7 +1,7 @@
 package com.nttdata.web.common;
 
+
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,32 +19,18 @@ public class CommonServiceImpl implements CommonService {
 
 	@Autowired
 	private CommonDAO commonDAO;
-
-	@Override
-	public String convertToJSON(List<LinkedHashMap<String, Integer>> graphData) {
-		ObjectMapper mapper = new ObjectMapper();
-		String jsonInString = null;
-
-		try {
-
-			jsonInString = mapper.writeValueAsString(graphData);
-			System.out.println(jsonInString);
-
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		return jsonInString;
-	}
 	
 	@Override
 	public String convertToJSON(int[][][] graphData) {
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonInString = null;
-
+		
 		try {
 
 			jsonInString = mapper.writeValueAsString(graphData);
+			//jsonInString = jsonInString.substring(1);
 			System.out.println(jsonInString);
+			
 
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
@@ -77,12 +63,12 @@ public class CommonServiceImpl implements CommonService {
 	public void deleteDataFromTempDensitytable(int userId, String predictionCode) {
 		commonDAO.deleteDataFromTempDensitytable(userId, predictionCode);
 	}
-
+	
 	@Override
 	public void saveData(MetricsBean metricsBean) {
 		commonDAO.saveData(metricsBean);
 	}
-
+	
 	@Override
 	public List<AlgorithmBean> getAlgorithmListForUser() {
 		return commonDAO.getAlgorithmListForUser();
@@ -92,11 +78,13 @@ public class CommonServiceImpl implements CommonService {
 	public String convertToJSON(HashMap<String, Integer> resultMap) {
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonInString = null;
-
+		
 		try {
 
 			jsonInString = mapper.writeValueAsString(resultMap);
+			//jsonInString = jsonInString.substring(1);
 			System.out.println(jsonInString);
+			
 
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();

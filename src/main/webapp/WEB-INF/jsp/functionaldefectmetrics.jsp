@@ -17,7 +17,7 @@
 	width: 100%;
 	height: 100%;
 	z-index: 9999;
-	background: url("<%=request.getContextPath()%>/resources/images/processing.gif") 50% 50% no-repeat rgb(249,249,249);
+	background: url('images/processing.gif') 50% 50% no-repeat rgb(249,249,249);
 }
 </style>
 <script type="text/javascript" src="<c:url value="/resources/js/jquery.min.js"/>"> </script>
@@ -37,8 +37,10 @@ function check()
 		}
 	}
 function calculateLimits(counter) {
-		var metricsId = $("#metricsId"+counter).val();
+	//alert('11');
+	var metricsId = $("#metricsId"+counter).val();
 
+	//alert(metricsId);
  $.ajax({
   type: "POST",
   url: "calulateLimit", 
@@ -116,7 +118,7 @@ Release Wise
 						</td> --%>
 						
 						<td>
-							<input  class="button" type="button" id="calculate" onclick="calculateLimits(${counter.count  - 1});" value="Reset" style="font-weight: bold;"/> &nbsp;
+							<input  class="button" type="button" id="calculate" onclick="calculateLimits(${counter.count  - 1});" value="Calculate" style="font-weight: bold;"/> &nbsp;
 							<input type="hidden" id="metricsId${counter.count -1}" name="predictBean.metricsList[${counter.count - 1}].metricsId" value="${metrics.metricsId}"/>
 							<input  class="textb" type="hidden" id="uclId${counter.count-1}1" name="predictBean.metricsList[${counter.count  - 1}].ucl[1]" value="<c:out value="${metrics.ucl[1]}"/>">
 							<input  class="textb" type="hidden" id="lclId${counter.count-1}1" name="predictBean.metricsList[${counter.count  - 1}].lcl[1]" value="<c:out value="${metrics.lcl[1]}"/>">
@@ -143,7 +145,7 @@ Release Wise
 					</c:forEach>
 				<tr ><td align="left" colspan="2" rowspan="2"> Algorithm : &nbsp;</td>
 						<td rowspan="2" ><select name="algorithmBean.algorithmId" style="width: 170px;">
-						<option value=0>Jubatus Regression</option>
+						<option value=0>--Select--</option>
 								<c:forEach var="data" items="${configBean.algorithmBeanList}"
 									varStatus="status">
 									

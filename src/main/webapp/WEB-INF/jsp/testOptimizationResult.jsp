@@ -17,37 +17,23 @@
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css">
 
-<script type="text/javascript" 
-		src="<c:url value="/resources/js/jquery.techbytarun.excelexportjs.js"/>">
-		
-
+<script type="text/javascript"
+	src="<c:url value="/resources/js/jquery.techbytarun.excelexportjs.js"/>">
 	
 </script>
 <script type="text/javascript">
 $(document).ready(function () {
-	
-	$('#').hide();
-	
     $("#btnExport").click(function () {
         $("#table-1").excelexportjs({
             containerid: "table-1"
            , datatype: 'table'
-        }); 
-        
+        });
     });
 });
 
-
 </script>
 <style type="text/css">
-tr.blank_row td {
-  border: 0;
-}
-.blank_row
-{
-    height: 40px !important; /* Overwrite any previous rules */
-    background-color: #FFFFFF;
-}
+
 .paddingCell{
 padding: 10px;
 }
@@ -111,37 +97,13 @@ ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
 						</tr>
 					</c:forEach>
-					<tr class="blank_row">
-					<c:forEach items="${resultList}" var="item">
-					 <td colspan="1"></td>
-					</c:forEach>
-					
 
 				</tr>
-
-				
-	<tr><td style="background-color: red ;width: 20px"></td><td style="padding-left: 5px;width: 160px">Duplicate Test Cases</tr>
-	<tr>
-	<td style="background-color: #ffb84d;width: 20px"></td><td style="padding-left: 5px;width: 160px">Redundant Test Cases</td>
-	</tr>
-	<tr><td style="background-color: #aeeaae ;width: 20px"></td><td style="padding-left: 5px;width: 160px">Distinct Test Cases</tr>
 			</tbody>
 		</table>
 		
 
 	</div>
-	<br><br>
-	<div style="background-color: white; width: 180px ">
-	<table border="1px" bordercolor="black" style="border-spacing: 10px;">
-	
-	<tr>
-	<tr><td style="background-color: red ;width: 20px"></td><td style="padding-left: 5px;width: 160px">Duplicate Test Cases</tr>
-	<tr>
-	<td style="background-color: #ffb84d;width: 20px"></td><td style="padding-left: 5px;width: 160px">Redundant Test Cases</td>
-	</tr>
-	<tr><td style="background-color: #aeeaae ;width: 20px"></td><td style="padding-left: 5px;width: 160px">Distinct Test Cases</tr>
-	
-	</table></div>
 	<br/>
 		<button id="btnExport">Export to excel</button>
 </center>

@@ -1,9 +1,9 @@
 <!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
 <etl>
 			<properties>
-  <include href="/D:/config/config.properties"/>
+        	<include href="messages.properties"/>
     	</properties>
-        <connection id="db1" driver="$mysql_driver" url="$mysql_cresta_url"  user="$mysql_cresta_user" password="$mysql_cresta_password"/>
+        <connection id="db1" driver="$sqlserver_driver" url="$sqlserver_database_url"  user="$sqlserver_user" password="$sqlserver_password"/>
         <connection id="java" driver="janino"/>
         <connection id="script" driver="script"/>
         <connection id="out" driver="$csv_driver" url="$csv_url"/>
@@ -21,12 +21,20 @@
 	    	java.lang.System.out.println("*********1234**************" + projectId);
 	    	next();
 		<query connection-id="db1">
-			select * from UseCaseData_Source;
+			select * from [dbo.UseCaseData];
 			
 	            <script connection-id="db2">
-	            	insert into usecase1BTelephonica (ID, PRED_CODE1,EFFORT_TO_FIX_DEFECT, COST_TO_FIX_DEFECT, IMPACT_OF_DEFECT_FIX, FEASIBILITY_WITHIN_MILESTONE, AVAILABILITY_OF_BUDGET, COMPLEXITY_OF_DEFECT_FIX, DEFECT_DEFERRAL_RATE, USER_ID, TPR_NAME, REL_ID, REL_PARENT_ID, RF_NAME, GR_GROUP_NAME, BG_SEVERITY, BG_PRIORITY) 
+	            	insert into UseCaseData (ID, PRED_CODE1,EFFORT_TO_FIX_DEFECT, COST_TO_FIX_DEFECT, IMPACT_OF_DEFECT_FIX, FEASIBILITY_WITHIN_MILESTONE, AVAILABILITY_OF_BUDGET, COMPLEXITY_OF_DEFECT_FIX, DEFECT_DEFERRAL_RATE, USER_ID, TPR_NAME, REL_ID, REL_PARENT_ID, RF_NAME, GR_GROUP_NAME, BG_SEVERITY, BG_PRIORITY) 
 	            	values ($id, '$pred_code1', $effort_to_fix_defect, $cost_to_fix_defect, $impact_of_defect_fix, $feasibility_within_milestone, $availability_of_budget, $complexity_of_defect_fix, $defect_deferral_rate, $user_id, '$tpr_name', $rel_id, $rel_parent_id, '$rf_name','$gr_group_name', '$bg_severity','$bg_priority');
 	            </script>
         </query>
         </query>
+
+	   <!--  <query connection-id="db2">
+	        Selects all not closed bugs
+	        SELECT d.RELEASE_VERSION, d.DENSITY FROM defect_density_version d;       
+		        <script connection-id="out">
+		            $RELEASE_VERSION, $DENSITY
+		        </script>
+	    </query>	     -->
 </etl>

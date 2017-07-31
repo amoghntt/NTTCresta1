@@ -17,6 +17,7 @@ public class CalculateUCLLCLServiceImpl implements CalculateUCLLCLService {
 
 	@Autowired
 	@Qualifier("scriptellaETL")
+	// @Qualifier("talendETL")
 	ETL etlBean;
 
 	@Autowired
@@ -60,22 +61,22 @@ public class CalculateUCLLCLServiceImpl implements CalculateUCLLCLService {
 		List<Integer> defectCount = new ArrayList<Integer>();
 		MetricsBean metricsBean = new MetricsBean();
 		if (metricsId == 13) {
-			defectCount = configService.getDefectDeferralCountTelephonica(userId, predictionCode);
+			defectCount = configService.getDefectDeferralCount(userId, predictionCode);
 			metricsBean = processCalculateUclLcl(projectId, StringUtils.valueOf(metricsId), defectCount);
 		} else if (metricsId == 4) {
-			defectCount = configService.getDefectAcceptanceCountTelephonica(userId, predictionCode);
+			defectCount = configService.getDefectAcceptanceCount(userId, predictionCode);
 			metricsBean = processCalculateUclLcl(projectId, StringUtils.valueOf(metricsId), defectCount);
 		} else if (metricsId == 1 && predictionCode.equals("DEFECT_DENSITY")) {
-			defectCount = configService.getDefectDensityCountTelephonica(userId, predictionCode);
+			defectCount = configService.getDefectDensityCount(userId, predictionCode);
 			metricsBean = processCalculateUclLcl(projectId, StringUtils.valueOf(metricsId), defectCount);
 		} else if ((metricsId == 1 || metricsId == 2 || metricsId == 3) && predictionCode.equals("DEFECTIVE_MODULES")) {
 			defectCount = configService.getDefectModuleCount(userId, predictionCode,metricsId);
 			metricsBean = processCalculateUclLcl(projectId, StringUtils.valueOf(metricsId), defectCount);
 		}else if (metricsId == 15) {
-			defectCount = configService.getDefectCountTelephonica(userId, predictionCode);
+			defectCount = configService.getDefectCount(userId, predictionCode);
 			metricsBean = processCalculateUclLcl(projectId, StringUtils.valueOf(metricsId), defectCount);
 		} else if (metricsId == 14) {
-			defectCount = configService.getFunctionalDefectDensityCountTelephonica(userId, predictionCode);
+			defectCount = configService.getFunctionalDefectDensityCount(userId, predictionCode);
 			metricsBean = processCalculateUclLcl(projectId, StringUtils.valueOf(metricsId), defectCount);
 		} else if (metricsId == 2) {
 			List<DefectLeakageModel> defectDensityList = configService.getDefectLeakageData(userId, predictionCode);

@@ -11,6 +11,6 @@ public interface DefectDefferalDAO {
 
 	List<DefectDeferralModelTelephonica> getDefectDefferalAndReleaseTelephonicaData(String userid, String pred_code);
 
-	List<ReleaseDetails> getLastTenPredictions(int algorithmId);
+	List<ReleaseDetails> getLastTenPredictions();
 
 }

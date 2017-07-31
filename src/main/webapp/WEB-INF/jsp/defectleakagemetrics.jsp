@@ -17,7 +17,8 @@
 	width: 100%;
 	height: 100%;
 	z-index: 9999;
-	background: url("<%=request.getContextPath()%>/resources/images/processing.gif") 50% 50% no-repeat rgb(249,249,249);
+	background: url('images/processing.gif') 50% 50% no-repeat
+		rgb(249, 249, 249);
 }
 </style>
 <script type="text/javascript"
@@ -76,7 +77,7 @@ $(window).load(function() {
 
 	<div class="loader"></div>
 	<div id="defects" class="tabcontent">
-		<table align="center" style="font-family: Verdana;font-weight: bold; color:#FF8C00">
+		<table align="center" style="font-family: Verdana;font-weight: bold;">
 			<tr>
 				<td>Project</td>
 				<td>${configBean.projectBean.projectName}</td>
@@ -107,9 +108,13 @@ $(window).load(function() {
 						var="metrics" varStatus="counter">
 						<tr>
 							<td><c:out value="${metrics.metricsName} :" /> &nbsp;</td>
+							<%-- <td>
+							<input  class="textb" type="text" id="weightagesId${counter.count}" name="weightages" value="<c:out value="${metrics.weightage}"/>">
+						</td> --%>
+
 							<td><input class="button" type="button" id="calculate"
 								onclick="calculateLimits(${counter.count  - 1});"
-								value="Reset" style="font-weight: bold;"/> &nbsp; <input type="hidden"
+								value="Calculate" style="font-weight: bold;"/> &nbsp; <input type="hidden"
 								id="metricsId${counter.count -1}"
 								name="predictBean.metricsList[${counter.count - 1}].metricsId"
 								value="${metrics.metricsId}" /> <input class="textb"
@@ -142,8 +147,10 @@ $(window).load(function() {
 					</c:forEach>
 <tr ><td align="left" colspan="2" rowspan="2"> Algorithm : &nbsp;</td>
 						<td rowspan="2" ><select name="projectBean.redmineProjectId" style="width: 170px;">
-						<option value=0>Jubatus Regression</option>
-								
+								<c:forEach var="data" items="${algorithmList}"
+									varStatus="status">
+									<option value="${data.algorithmId}">${data.algorithmCode}</option>
+								</c:forEach>
 						</select></td>
 					</tr>
 				<tr></tr>

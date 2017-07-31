@@ -16,15 +16,6 @@
 .releaseDetailsTable th { background-color:#BDB76B;color:white; }
 .releaseDetailsTable td, .myOtherTable th { padding:5px;border:0;text-align: left; }
 .releaseDetailsTable td { border-bottom:1px dotted #BDB76B; }
-.loader {
-	position: fixed;
-	left: 0px;
-	top: 0px;
-	width: 100%;
-	height: 100%;
-	z-index: 9999;
-	background: url("<%=request.getContextPath()%>/resources/images/processing.gif") 50% 50% no-repeat rgb(249,249,249);
-}
 </style>
 </head>
 <body>
@@ -71,7 +62,7 @@
 
 		<script type="text/javascript">
 		$(document).ready(function(){
-			    $("#myBtn").click(function(){
+		    $("#myBtn").click(function(){
 		    	var tableLegend = $( ".jqplot-table-legend" );
 				tableLegend.css('z-index', '0');
 		    });

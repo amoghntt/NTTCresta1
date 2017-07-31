@@ -24,9 +24,6 @@ import com.nttdata.web.usecase1D.service.FindDefectsServiceUseCase1D;
 import com.nttdata.web.usecase2.service.FindDefectsServiceUseCase2;
 import com.nttdata.web.usecase3.model.DefectLeakageModel;
 import com.nttdata.web.usecase3.service.FindDefectsServiceUseCase3;
-import com.nttdata.web.utils.CrestaConstants;
-import com.nttdata.web.utils.CrestaQueryConstants;
-import com.nttdata.web.utils.JubatusUtils;
 
 @Service
 public class JubatusProcessor {
@@ -125,7 +122,6 @@ public class JubatusProcessor {
 			lcl = metricsBean.getLcl();
 			resultList.add(lcl);
 			resultList.add(ucl);
-			JubatusUtils.stopJubatus(CrestaQueryConstants.PORT);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -170,16 +166,16 @@ public class JubatusProcessor {
 	}
 
 	public List<Integer> getAllPredictionResultUseCase1D(String predictionId, String userId, int algorithmId) {
-		predictionId = "Functional";
+
 		List<Integer> predictedResultList = new ArrayList<Integer>();
 
 		int predictedResult1 = Java2PythonExecutor
-				.getPredictionResult(ScikitConstants.UC1D_SCIKIT_LINEAR_REGRESSION_SCRIPT_TELEPHONICA, predictionId, userId);
+				.getPredictionResult(ScikitConstants.UC1D_SCIKIT_LINEAR_REGRESSION_SCRIPT, predictionId, userId);
 
-		int predictedResult2 = Java2PythonExecutor.getPredictionResult(ScikitConstants.UC1D_SCIKIT_SVR_LINEAR_SCRIPT_TELEPHONICA,
+		int predictedResult2 = Java2PythonExecutor.getPredictionResult(ScikitConstants.UC1D_SCIKIT_SVR_LINEAR_SCRIPT,
 				predictionId, userId);
 
-		int predictedResult3 = Java2PythonExecutor.getPredictionResult(ScikitConstants.UC1D_SCIKIT_SVR_RBF_SCRIPT_TELEPHONICA,
+		int predictedResult3 = Java2PythonExecutor.getPredictionResult(ScikitConstants.UC1D_SCIKIT_SVR_RBF_SCRIPT,
 				predictionId, userId);
 		predictedResultList.add(0, predictedResult1);
 		predictedResultList.add(1, predictedResult2);
@@ -187,7 +183,7 @@ public class JubatusProcessor {
 		return predictedResultList;
 	}
 
-	public List<Integer> getAllPredictionResultTelephonicaUseCase1(String predictionId, String userId, int algorithmId) {
+	public List<Integer> getAllPredictionResultUseCase1(String predictionId, String userId, int algorithmId) {
 
 		List<Integer> predictedResultList = new ArrayList<Integer>();
 
@@ -198,6 +194,24 @@ public class JubatusProcessor {
 				predictionId, userId);
 
 		int predictedResult3 = Java2PythonExecutor.getPredictionResult(ScikitConstants.UC1_TELEPHONICA_SCIKIT_SVR_RBF_SCRIPT,
+				predictionId, userId);
+		predictedResultList.add(0, predictedResult1);
+		predictedResultList.add(1, predictedResult2);
+		predictedResultList.add(2, predictedResult3);
+		return predictedResultList;
+	}
+	
+	public List<Integer> getAllPredictionResultTelephonicaUseCase1(String predictionId, String userId, int algorithmId) {
+
+		List<Integer> predictedResultList = new ArrayList<Integer>();
+
+		int predictedResult1 = Java2PythonExecutor
+				.getPredictionResult(ScikitConstants.UC1_SCIKIT_LINEAR_REGRESSION_SCRIPT, predictionId, userId);
+
+		int predictedResult2 = Java2PythonExecutor.getPredictionResult(ScikitConstants.UC1_SCIKIT_SVR_LINEAR_SCRIPT,
+				predictionId, userId);
+
+		int predictedResult3 = Java2PythonExecutor.getPredictionResult(ScikitConstants.UC1_SCIKIT_SVR_RBF_SCRIPT,
 				predictionId, userId);
 		predictedResultList.add(0, predictedResult1);
 		predictedResultList.add(1, predictedResult2);
@@ -314,33 +328,16 @@ public class JubatusProcessor {
 
 	public List<Integer> getPredictionResultUseCase1D(String predictionId, String userId, int algorithmId) {
 		int predictedResult = 0;
-		predictionId = "Functional";
 		List<Integer> predictedResultList = new ArrayList<Integer>();
 		if (algorithmId == 2) {
 			predictedResult = Java2PythonExecutor
-					.getPredictionResult(ScikitConstants.UC1D_SCIKIT_LINEAR_REGRESSION_SCRIPT_TELEPHONICA, predictionId, userId);
+					.getPredictionResult(ScikitConstants.UC1D_SCIKIT_LINEAR_REGRESSION_SCRIPT, predictionId, userId);
 		} else if (algorithmId == 3) {
-			predictedResult = Java2PythonExecutor.getPredictionResult(ScikitConstants.UC1D_SCIKIT_SVR_LINEAR_SCRIPT_TELEPHONICA,
+			predictedResult = Java2PythonExecutor.getPredictionResult(ScikitConstants.UC1D_SCIKIT_SVR_LINEAR_SCRIPT,
 					predictionId, userId);
 		} else if (algorithmId == 4) {
-			predictedResult = Java2PythonExecutor.getPredictionResult(ScikitConstants.UC1D_SCIKIT_SVR_RBF_SCRIPT_TELEPHONICA,
+			predictedResult = Java2PythonExecutor.getPredictionResult(ScikitConstants.UC1D_SCIKIT_SVR_RBF_SCRIPT,
 					predictionId, userId);
-
-		}
-		predictedResultList.add(predictedResult);
-		return predictedResultList;
-	}
-	
-	public List<Integer> predictDefectCountBoA(int algorithmId) {
-		int predictedResult = 0;
-		List<Integer> predictedResultList = new ArrayList<Integer>();
-		if (algorithmId == 2) {
-			predictedResult = Java2PythonExecutor
-					.getPredictionResultBoADefectCount(ScikitConstants.UC_BoA_DEFECT_COUNT_SCIKIT_LINEAR_REGRESSION_SCRIPT);
-		} else if (algorithmId == 3) {
-			predictedResult = Java2PythonExecutor.getPredictionResultBoADefectCount(ScikitConstants.UC_BoA_DEFECT_COUNT_SCIKIT_SVR_LINEAR_SCRIPT);
-		} else if (algorithmId == 4) {
-			predictedResult = Java2PythonExecutor.getPredictionResultBoADefectCount(ScikitConstants.UC_BoA_DEFECT_COUNT_SCIKIT_SVR_RBF_SCRIPT);
 
 		}
 		predictedResultList.add(predictedResult);

@@ -9,23 +9,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
   <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/button-style.css">
- <style>
-.loader {
-	position: fixed;
-	left: 0px;
-	top: 0px;
-	width: 100%;
-	height: 100%;
-	z-index: 9999;
-	background: url("<%=request.getContextPath()%>/resources/images/processing.gif") 50% 50% no-repeat rgb(249,249,249);
-}
-</style>
 <script type="text/javascript" src="<c:url value="/resources/js/jquery.min.js"/>"> </script>
 <script type="text/javascript" src="<c:url value="/resources/js/jquery-ui.min.js"/>"> </script>
 <script type="text/javascript" src="<c:url value="/resources/js/jquery-ui.js"/>"> </script>
 <script type="text/javascript" src="<c:url value="/resources/js/metricsvalidations.js"/>"> </script>
 <script type="text/javascript">
-
+var metricLength;
 function check()
 {
 	var count = "${metricsSize}";
@@ -37,8 +26,10 @@ function check()
 		}
 	}
 function calculateLimits(counter) {
-		var metricsId = $("#metricsId"+counter).val();
+	//alert('11');
+	var metricsId = $("#metricsId"+counter).val();
 
+	//alert(metricsId);
  $.ajax({
   type: "POST",
   url: "calulateLimit", 
@@ -58,18 +49,13 @@ function calculateLimits(counter) {
 }
 </script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript">
 
-$(window).load(function() {
-	$(".loader").fadeOut("slow");
-	metricLength = "${metricsSize}";
-})
-</script>
+
 
 </head>
 
 <body onload="check()">
-<div class="loader"></div>
+
 <div id="defects" class="tabcontent">
 	<table align="center" style="font-family: Verdana;font-weight: bold;color:#FF8C00">
 <tr>
@@ -99,8 +85,7 @@ Release Wise
 	 <br/>
 <c:if test="${fn:length(configBean.predictBean.metricsList) gt 0}">
 
-
-<form:form method="POST" action="predictDefectDensityForUseCase1" id="predictForm">
+<form:form method="POST" action="predictDefectDensityForUseCase1">
 	
 		<table align="center" style="font-family: Verdana;font-weight: bold;">
 		<tr><td></td><td></td><td align="center">LCL</td>
@@ -117,7 +102,7 @@ Release Wise
 						</td> --%>
 						
 						<td>
-							<input  class="button" type="button" id="calculate" onclick="calculateLimits(${counter.count  - 1});" value="Reset" style="font-weight: bold;" /> &nbsp;
+							<input  class="button" type="button" id="calculate" onclick="calculateLimits(${counter.count  - 1});" value="Calculate" style="font-weight: bold;" /> &nbsp;
 							<input type="hidden" id="metricsId${counter.count -1}" name="predictBean.metricsList[${counter.count - 1}].metricsId" value="${metrics.metricsId}"/>
 							<input  class="textb" type="hidden" id="uclId${counter.count-1}1" name="predictBean.metricsList[${counter.count  - 1}].ucl[1]" value="<c:out value="${metrics.ucl[1]}"/>">
 							<input  class="textb" type="hidden" id="lclId${counter.count-1}1" name="predictBean.metricsList[${counter.count  - 1}].lcl[1]" value="<c:out value="${metrics.lcl[1]}"/>">
@@ -145,7 +130,7 @@ Release Wise
 				</c:forEach>
 				<tr ><td align="left" colspan="2" rowspan="2"> Algorithm : &nbsp;</td>
 						<td rowspan="2" ><select name="algorithmBean.algorithmId" style="width: 170px;">
-						<option value=0>Jubatus Regression</option>
+						<option value=0>--Select--</option>
 								<c:forEach var="data" items="${algorithmList}"
 									varStatus="status">
 									<option value="${data.algorithmId}">${data.algorithmCode}</option>
@@ -156,7 +141,7 @@ Release Wise
 					<tr>
 						<td colspan="4" align="center">
 						
-								<input id="predict" class="myButton" type="submit" value="Predict" onclick="return validateForm()" />
+								<input  class="myButton" type="submit" value="Predict" onclick="return validateForm()" />
 						
 						</td>
 											

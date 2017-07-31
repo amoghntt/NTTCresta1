@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.nttdata.web.model.MetricsBean;
 import com.nttdata.web.usecase3.model.DefectLeakageModel;
-import com.nttdata.web.utils.CrestaConstants;
 import com.nttdata.web.utils.CrestaQueryConstants;
-import com.nttdata.web.utils.JubatusUtils;
-
 import us.jubat.stat.StatClient;
 
 public class JubatusHelper {
@@ -148,8 +145,6 @@ public class JubatusHelper {
 	}
 
 	public MetricsBean getCalculateLimit(int weightagesId, List<Integer> defectCount) {
-		JubatusUtils.startJubatus(CrestaConstants.JUBASTAT,
-				CrestaConstants.JUBASTAT_CONFIG_FILE_PATH, CrestaQueryConstants.PORT);
 		MetricsBean metricsBean = new MetricsBean();
 		try {
 			String[] finalValue = new JubatusHelper().startCalcUclLcl(weightagesId, defectCount);

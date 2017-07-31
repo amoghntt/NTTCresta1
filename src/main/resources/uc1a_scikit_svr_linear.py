@@ -6,13 +6,12 @@ from pandas import DataFrame
 from sklearn.svm import SVR
 
 
-config = dict(line.strip().split('=') for line in open('/opt/apache-tomcat-8.0.36/webapps/resources1/config.properties'))
-cnx = mysql.connector.connect(user=config.get("mysql_cresta_user"), password=config.get("mysql_cresta_password"),
-                              host=config.get("mysql_host"),
-                           database=config.get("db_name"))
+cnx = mysql.connector.connect(user='cresta', password='cresta',
+                               host='10.248.3.91',
+                           database='cresta')
 cols = ['KLOC', 'test_case_count', 'application_complexity', 'domain_knowledge', 'technical_skills', 'requirements_query_count', 'code_review_comments', 'design_review_comments', 'acceptance']
 strColumns = ','.join(cols)
-query = "select " + strColumns + " from usecase1ATelephonica where pred_code2=%s and user_id=%s"
+query = "select " + strColumns + " from UseCaseData where pred_code2=%s and user_id=%s"
 params = (sys.argv[1], sys.argv[2])
 try:
    cursor = cnx.cursor()

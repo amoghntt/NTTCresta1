@@ -3,10 +3,7 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/contexts"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/images"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/python_scripts"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java/python_scripts"/>
         <property name="context-root" value="cresta"/>
         <property name="java-output-path" value="/cresta/target/classes"/>
     </wb-module>
