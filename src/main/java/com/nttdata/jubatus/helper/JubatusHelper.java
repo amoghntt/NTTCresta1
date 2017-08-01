@@ -35,7 +35,7 @@ public class JubatusHelper {
 				key = "defect_density";
 				break;
 			case 2:
-				key = " defect _leakage";
+				key = "Defect _leakage";
 				break;
 			case 3:
 				key = "functional_defect_rejection";
